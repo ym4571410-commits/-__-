@@ -43,7 +43,7 @@
             margin: 0;
             padding: 0;
             background: linear-gradient(135deg, #1a002a, #3b0066);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -51,27 +51,50 @@
 
         .login-card {
             background: #2b004d;
-            padding: 35px 30px;
-            border-radius: 25px;
-            width: 340px;
-            box-shadow: 0 0 30px rgba(128, 0, 255, 0.6);
+            padding: 40px 30px;
+            border-radius: 30px;
+            width: 360px;
+            box-shadow: 0 0 40px rgba(128, 0, 255, 0.6);
             text-align: center;
             border: 1px solid rgba(255, 215, 0, 0.2);
         }
 
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(145deg, #3b0066, #1a002a);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .login-icon i {
+            font-size: 40px;
+            color: var(--gold);
+        }
+
         .login-card h2 {
             color: #fff;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
             font-weight: 800;
             letter-spacing: 2px;
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .welcome-sub {
+            color: #a0a0b0;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
         }
 
         .input-box {
             width: 100%;
-            padding: 14px 18px;
-            margin: 12px 0;
+            padding: 15px 18px;
+            margin-bottom: 20px;
             border: 2px solid transparent;
             border-radius: 14px;
             background: #1f1f2e;
@@ -96,7 +119,6 @@
         .btn {
             width: 100%;
             padding: 15px;
-            margin-top: 20px;
             border: none;
             border-radius: 14px;
             background: linear-gradient(90deg, #8a00ff, #d000ff);
@@ -119,16 +141,16 @@
         .error-message {
             color: #ff6b6b;
             text-align: center;
-            margin-top: 18px;
+            margin-top: 15px;
             min-height: 24px;
             font-size: 14px;
         }
 
         .telegram-link-box {
-            margin-top: 25px;
-            padding: 15px;
+            margin-top: 20px;
+            padding: 12px;
             background: rgba(0, 136, 204, 0.1);
-            border-radius: 16px;
+            border-radius: 14px;
             border: 1px solid #0088cc;
         }
 
@@ -141,18 +163,10 @@
             gap: 8px;
             font-size: 15px;
             font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .telegram-link:hover {
-            color: white;
-            background: #0088cc;
-            padding: 8px;
-            border-radius: 12px;
         }
 
         .telegram-link i {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         /* ========== التطبيق الرئيسي ========== */
@@ -229,10 +243,6 @@
             color: white;
         }
 
-        .add-game-btn:hover {
-            opacity: 0.85;
-        }
-
         /* ========== لوحة تحكم الأدمن ========== */
         .admin-panel {
             background: #12121a;
@@ -267,7 +277,6 @@
             color: #a0a0b0;
             font-size: 1.8rem;
             cursor: pointer;
-            transition: color 0.3s;
         }
 
         .close-panel:hover {
@@ -284,7 +293,6 @@
             background: #181822;
             border-radius: 20px;
             padding: 22px;
-            border: 1px solid rgba(255,255,255,0.03);
         }
 
         .admin-game-header {
@@ -307,10 +315,6 @@
             font-size: 1.2rem;
         }
 
-        .delete-game-btn:hover {
-            color: #ff0000;
-        }
-
         .price-item {
             display: flex;
             align-items: center;
@@ -322,7 +326,6 @@
 
         .price-item span {
             color: #a0a0b0;
-            font-size: 0.95rem;
         }
 
         .price-item input {
@@ -334,7 +337,6 @@
             color: white;
             text-align: left;
             direction: ltr;
-            font-size: 1rem;
         }
 
         .save-prices-btn {
@@ -346,7 +348,6 @@
             border-radius: 14px;
             color: white;
             font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
         }
 
@@ -451,12 +452,6 @@
             color: #d000ff;
         }
 
-        .empty-state {
-            text-align: center;
-            color: #a0a0b0;
-            padding: 50px;
-        }
-
         /* ========== صفحة الألعاب ========== */
         .games-container {
             max-width: 1200px;
@@ -490,7 +485,6 @@
         .game-card:hover {
             transform: translateY(-6px);
             border-color: #d000ff;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         .game-card h3 {
@@ -555,7 +549,6 @@
             font-size: 1.1rem;
             text-align: left;
             direction: ltr;
-            transition: border 0.3s;
         }
 
         .player-id-section input:focus {
@@ -621,7 +614,6 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            transition: all 0.3s;
         }
 
         .buy-btn:disabled {
@@ -779,6 +771,12 @@
             z-index: 2000;
             display: none;
         }
+
+        .empty-state {
+            text-align: center;
+            color: #a0a0b0;
+            padding: 50px;
+        }
     </style>
 </head>
 <body>
@@ -786,7 +784,8 @@
 <!-- ========== صفحة تسجيل الدخول ========== -->
 <div id="loginPage" class="login-container">
     <div class="login-card">
+        <div class="login-icon">
+            <i class="fas fa-crown"></i>
+        </div>
         <h2>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h2>
-        
-        <form id="loginForm">
-            <i
+        <p class="welcome-sub">أد
