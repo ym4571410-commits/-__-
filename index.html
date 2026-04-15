@@ -12,7 +12,7 @@
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        :root { --gold: #FFD700; --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-card: #181822; --text-white: #FFFFFF; --text-gray: #a0a0b0; --accent: #45A29E; --success: #00C853; --error: #FF3D00; --vodafone: #E60000; --warning: #FF9800; }
+        :root { --gold: #FFD700; --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-card: #181822; --text-white: #FFFFFF; --text-gray: #a0a0b0; --accent: #45A29E; --success: #00C853; --error: #FF3D00; --vodafone: #E60000; --warning: #FF9800; --offer: #FF6B6B; }
         body { background: var(--bg-primary); min-height: 100vh; color: var(--text-white); }
 
         /* تسجيل الدخول */
@@ -34,8 +34,19 @@
         .user-controls { display: flex; align-items: center; gap: 12px; }
         #userRoleDisplay { background: rgba(208,0,255,0.15); padding: 6px 16px; border-radius: 40px; color: #d000ff; }
         .logout-btn, .admin-toggle-btn { background: transparent; border: 1px solid #d000ff; color: #d000ff; padding: 8px 16px; border-radius: 40px; cursor: pointer; }
-        .fab-add { position: fixed; bottom: 25px; left: 25px; width: 60px; height: 60px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 200; }
+        .fab-add { position: fixed; bottom: 25px; left: 25px; width: 60px; height: 60px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 200; transition: 0.3s; }
+        .fab-add.active { transform: rotate(45deg); background: var(--gold); }
         
+        /* قائمة الخيارات العائمة */
+        .fab-menu { position: fixed; bottom: 100px; left: 25px; display: none; flex-direction: column; gap: 15px; z-index: 199; }
+        .fab-menu.show { display: flex; }
+        .fab-option { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .fab-option.game { background: #8a00ff; }
+        .fab-option.offer { background: var(--offer); }
+        .fab-option:hover { transform: scale(1.1); }
+        .fab-option span { position: absolute; right: -120px; background: var(--bg-card); padding: 8px 15px; border-radius: 30px; font-size: 14px; white-space: nowrap; opacity: 0; transition: 0.3s; pointer-events: none; }
+        .fab-option:hover span { opacity: 1; right: -130px; }
+
         /* لوحة التحكم */
         .admin-panel { background: #12121a; margin: 20px auto; max-width: 1200px; border-radius: 20px; padding: 25px; border: 1px solid rgba(208,0,255,0.3); display: none; }
         .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 1px solid rgba(208,0,255,0.2); padding-bottom: 18px; }
@@ -51,18 +62,28 @@
         .save-prices-btn { width: 100%; margin-top: 18px; padding: 12px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; }
 
         /* مودال إضافة لعبة */
-        .add-game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1001; align-items: center; justify-content: center; }
-        .add-game-content { max-width: 480px; background: #181822; border-radius: 28px; padding: 30px 25px; border: 1px solid #d000ff; }
-        .add-game-content h2 { color: #FFD700; text-align: center; margin-bottom: 25px; }
-        .add-game-content input[type="text"] { width: 100%; padding: 14px; background: #0a0a0f; border: 1px solid #d000ff; border-radius: 14px; color: white; }
+        .add-game-modal, .add-offer-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1001; align-items: center; justify-content: center; }
+        .add-game-content, .add-offer-content { max-width: 480px; background: #181822; border-radius: 28px; padding: 30px 25px; border: 1px solid #d000ff; }
+        .add-game-content h2, .add-offer-content h2 { color: #FFD700; text-align: center; margin-bottom: 25px; }
+        .add-game-content input, .add-offer-content input, .add-offer-content select { width: 100%; padding: 14px; background: #0a0a0f; border: 1px solid #d000ff; border-radius: 14px; color: white; margin-bottom: 15px; }
         .items-list-container { max-height: 220px; overflow-y: auto; margin: 20px 0; }
         .add-item-row { display: flex; gap: 10px; margin-bottom: 12px; }
         .add-item-row input { flex: 1; padding: 12px !important; }
         .add-item-btn { background: var(--accent); color: white; border: none; padding: 12px 20px; border-radius: 14px; cursor: pointer; width: 100%; }
         .modal-actions { display: flex; gap: 12px; margin-top: 25px; }
         .modal-actions button { flex: 1; padding: 15px; border-radius: 14px; font-weight: 600; cursor: pointer; }
-        .save-game-btn { background: linear-gradient(90deg, #8a00ff, #d000ff); color: white; border: none; }
+        .save-game-btn, .save-offer-btn { background: linear-gradient(90deg, #8a00ff, #d000ff); color: white; border: none; }
         .cancel-btn { background: transparent; border: 1px solid #d000ff; color: #d000ff; }
+
+        /* صفحة العروض */
+        .offers-section { margin-bottom: 30px; }
+        .offers-title { color: var(--offer); font-size: 1.8rem; margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .offers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; margin-bottom: 30px; }
+        .offer-card { background: linear-gradient(135deg, #181822, #1f1f2e); border-radius: 20px; padding: 25px 15px; text-align: center; cursor: pointer; border: 2px solid var(--offer); position: relative; overflow: hidden; }
+        .offer-card::before { content: "🔥 عرض"; position: absolute; top: 10px; right: 10px; background: var(--offer); color: white; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .offer-card h3 { color: white; font-size: 1.2rem; margin-bottom: 10px; }
+        .offer-price { color: var(--offer); font-size: 1.5rem; font-weight: 800; }
+        .offer-duration { color: var(--text-gray); font-size: 0.9rem; margin-top: 5px; }
 
         /* صفحة الألعاب */
         .games-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
@@ -88,41 +109,31 @@
         .buy-btn { width: 100%; margin-top: 35px; padding: 20px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 60px; color: white; font-size: 1.4rem; font-weight: 700; cursor: pointer; }
         .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* مودال الدفع - 3 خطوات */
+        /* مودال الدفع */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; }
         .modal-content { max-width: 460px; background: #181822; border-radius: 36px; padding: 35px 25px; border: 1px solid #d000ff; text-align: center; }
-        
         .step-icon { font-size: 60px; margin-bottom: 20px; }
         .step-icon.warning { color: var(--warning); }
-        .step-icon.success { color: var(--success); }
         .step-icon.gold { color: var(--gold); }
+        .step-icon.offer { color: var(--offer); }
         .modal-content h2 { color: var(--gold); margin-bottom: 20px; font-size: 1.6rem; }
         .warning-box { background: rgba(255,152,0,0.1); padding: 20px; border-radius: 20px; border: 2px solid var(--warning); margin-bottom: 25px; }
         .warning-box p { color: var(--warning); font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
-        .warning-box small { color: var(--text-gray); }
-        
         .order-details { background: rgba(208,0,255,0.06); padding: 18px; border-radius: 18px; margin-bottom: 25px; text-align: right; }
         .order-details p { margin-bottom: 10px; color: var(--text-gray); }
         .order-details strong { color: var(--gold); }
-        
         .next-btn { width: 100%; padding: 16px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 50px; color: white; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
         .back-btn-light { width: 100%; padding: 14px; margin-top: 12px; background: transparent; border: 1px solid var(--text-gray); border-radius: 50px; color: var(--text-gray); cursor: pointer; }
-        
         .vodafone-box { background: #0a0a0f; padding: 28px; border-radius: 24px; border: 2px solid var(--vodafone); margin: 20px 0; }
         .vodafone-logo { color: var(--vodafone); font-size: 2rem; font-weight: 800; margin-bottom: 15px; }
         .vodafone-number { font-size: 2.5rem; font-weight: 700; color: white; letter-spacing: 5px; direction: ltr; margin-bottom: 20px; }
-        .copy-btn { background: var(--vodafone); color: white; border: none; padding: 12px 30px; border-radius: 40px; cursor: pointer; font-size: 1.1rem; font-weight: 600; }
-        
+        .copy-btn { background: var(--vodafone); color: white; border: none; padding: 12px 30px; border-radius: 40px; cursor: pointer; }
         .confirm-transfer-btn { width: 100%; padding: 18px; background: var(--success); border: none; border-radius: 60px; color: white; font-size: 1.3rem; font-weight: 700; cursor: pointer; margin-top: 20px; }
-        
         .pending-message { text-align: center; padding: 20px 10px; }
         .pending-message i { font-size: 80px; color: var(--gold); margin-bottom: 25px; animation: pulse 1.5s infinite; }
         .pending-message h3 { color: var(--gold); margin-bottom: 15px; font-size: 1.6rem; }
-        .pending-message p { color: var(--text-gray); margin-bottom: 10px; }
-        
         @keyframes pulse { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
-        .close-modal-btn { margin-top: 25px; padding: 14px 35px; background: transparent; border: 1px solid var(--gold); color: var(--gold); border-radius: 40px; cursor: pointer; font-weight: 600; }
-        
+        .close-modal-btn { margin-top: 25px; padding: 14px 35px; background: transparent; border: 1px solid var(--gold); color: var(--gold); border-radius: 40px; cursor: pointer; }
         .toast-message { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 14px 30px; border-radius: 60px; z-index: 2000; display: none; }
         .empty-state { text-align: center; color: #a0a0b0; padding: 50px; }
     </style>
@@ -133,7 +144,7 @@
 <div id="loginPage" class="login-container">
     <div class="login-card">
         <h2>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h2>
-        <input type="password" id="passwordInput" class="input-box" placeholder="كلمة المرور" required>
+        <input type="password" id="passwordInput" class="input-box" placeholder="كلمة المرور">
         <button class="btn" id="loginBtn">LOGIN SECURELY →</button>
         <div id="errorMessage" class="error-message"></div>
         <div class="telegram-link-box">
@@ -165,9 +176,10 @@
         <div class="admin-game-list" id="adminGameList"></div>
     </div>
 
+    <!-- مودال إضافة لعبة -->
     <div id="addGameModal" class="add-game-modal">
         <div class="add-game-content">
-            <h2><i class="fas fa-plus-circle"></i> إضافة لعبة جديدة</h2>
+            <h2><i class="fas fa-gamepad"></i> إضافة لعبة جديدة</h2>
             <label>اسم اللعبة</label>
             <input type="text" id="newGameName" placeholder="مثال: Free Fire" dir="ltr">
             <label>العناصر (الكمية - السعر)</label>
@@ -180,15 +192,46 @@
         </div>
     </div>
 
+    <!-- مودال إضافة عرض -->
+    <div id="addOfferModal" class="add-offer-modal">
+        <div class="add-offer-content">
+            <h2><i class="fas fa-fire"></i> إضافة عرض جديد</h2>
+            <label>اسم العرض</label>
+            <input type="text" id="newOfferName" placeholder="مثال: عرض الجمعة السوداء" dir="rtl">
+            <label>السعر (ج.م)</label>
+            <input type="number" id="newOfferPrice" placeholder="مثال: 99" min="0">
+            <label>المدة</label>
+            <select id="newOfferDuration">
+                <option value="يوم واحد">يوم واحد</option>
+                <option value="3 أيام">3 أيام</option>
+                <option value="أسبوع">أسبوع</option>
+                <option value="شهر">شهر</option>
+                <option value="دائم">دائم</option>
+            </select>
+            <label>وصف العرض (اختياري)</label>
+            <input type="text" id="newOfferDesc" placeholder="مثال: خصم 50% على كل الشحنات" dir="rtl">
+            <div class="modal-actions">
+                <button class="save-offer-btn" id="saveNewOfferBtn">حفظ العرض</button>
+                <button class="cancel-btn" id="cancelAddOfferBtn">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <div id="gamesPage">
         <main class="games-container">
+            <!-- قسم العروض -->
+            <div class="offers-section" id="offersSection">
+                <h2 class="offers-title"><i class="fas fa-fire"></i> عروض حصرية 🔥</h2>
+                <div class="offers-grid" id="offersGrid"></div>
+            </div>
+            
             <h2 class="section-title">اختر لعبتك المفضلة</h2>
             <div class="games-grid" id="gamesGrid"></div>
         </main>
     </div>
 
     <div id="detailsPage" style="display: none;">
-        <button class="back-btn" id="backToGamesBtn"><i class="fas fa-arrow-right"></i> رجوع للألعاب</button>
+        <button class="back-btn" id="backToGamesBtn"><i class="fas fa-arrow-right"></i> رجوع</button>
         <div class="detail-header"><h1 id="gameTitle"></h1><div></div></div>
         <main class="detail-container">
             <div class="player-id-section">
@@ -201,6 +244,17 @@
         </main>
     </div>
 
+    <!-- زرار + وقائمة الخيارات -->
+    <div class="fab-menu" id="fabMenu">
+        <div class="fab-option game" id="addGameOption">
+            <i class="fas fa-gamepad"></i>
+            <span>إضافة لعبة</span>
+        </div>
+        <div class="fab-option offer" id="addOfferOption">
+            <i class="fas fa-fire"></i>
+            <span>إضافة عرض</span>
+        </div>
+    </div>
     <button id="fabAddBtn" class="fab-add"><i class="fas fa-plus"></i></button>
 </div>
 
@@ -247,47 +301,338 @@
 <div id="toast" class="toast-message"></div>
 
 <script>
+// بيانات التطبيق
 const TELEGRAM_BOT_TOKEN = '8667816880:AAH0sb2Rdo1xtuZaJhmWYYmrJ2Jyj2YFUvI';
 const TELEGRAM_CHAT_ID = '8397243250';
-let currentUser = null, selectedGame = null, selectedItem = null, gamesData = [], tempNewItems = [], currentPlayerId = '';
+
+let currentUser = null;
+let selectedGame = null;
+let selectedItem = null;
+let gamesData = [];
+let offersData = [];
+let tempNewItems = [];
+let currentPlayerId = '';
 
 const defaultGames = [
-    { id: 1, name: 'Free Fire', items: [{ id: 1, name: '100 Diamond', price: 50 }, { id: 2, name: '520 Diamond', price: 250 }, { id: 3, name: '1060 Diamond', price: 500 }] },
-    { id: 2, name: 'PUBG Mobile', items: [{ id: 1, name: '60 UC', price: 60 }, { id: 2, name: '300 UC', price: 300 }, { id: 3, name: '600 UC', price: 600 }] }
+    { id: 1, name: 'Free Fire', items: [{ id: 1, name: '100 Diamond', price: 50 }, { id: 2, name: '520 Diamond', price: 250 }] },
+    { id: 2, name: 'PUBG Mobile', items: [{ id: 1, name: '60 UC', price: 60 }, { id: 2, name: '300 UC', price: 300 }] }
 ];
 
-function loadGamesData() { const s = localStorage.getItem('madmoun_games_data'); gamesData = s ? JSON.parse(s) : JSON.parse(JSON.stringify(defaultGames)); if (!s) saveGamesData(); }
+const defaultOffers = [
+    { id: 1, name: 'عرض الترحيب', price: 49, duration: 'أسبوع', description: 'خصم 30% على أول شحنة' },
+    { id: 2, name: 'عرض الجمعة', price: 99, duration: '3 أيام', description: 'شحن مزدوج' }
+];
+
+function loadData() { 
+    const g = localStorage.getItem('madmoun_games_data'); 
+    gamesData = g ? JSON.parse(g) : JSON.parse(JSON.stringify(defaultGames)); 
+    if (!g) saveGamesData();
+    
+    const o = localStorage.getItem('madmoun_offers_data');
+    offersData = o ? JSON.parse(o) : JSON.parse(JSON.stringify(defaultOffers));
+    if (!o) saveOffersData();
+}
 function saveGamesData() { localStorage.setItem('madmoun_games_data', JSON.stringify(gamesData)); }
+function saveOffersData() { localStorage.setItem('madmoun_offers_data', JSON.stringify(offersData)); }
 function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
 
-// ========== تسجيل الدخول ==========
+// تسجيل الدخول
 document.getElementById('loginBtn').addEventListener('click', function() {
-    const password = document.getElementById('passwordInput').value;
-    const errorMsg = document.getElementById('errorMessage');
-    
-    if (password === '@YOUSSEF1234') {
+    const p = document.getElementById('passwordInput').value;
+    if (p === '@YOUSSEF1234') {
         currentUser = 'admin';
         document.getElementById('userRoleDisplay').textContent = 'أدمن';
         document.getElementById('adminToggleBtn').style.display = 'flex';
         document.getElementById('fabAddBtn').style.display = 'flex';
         showApp();
-    } else if (password === 'madmoun') {
+    } else if (p === 'madmoun') {
         currentUser = 'user';
         document.getElementById('userRoleDisplay').textContent = 'زائر';
         document.getElementById('adminToggleBtn').style.display = 'none';
         document.getElementById('fabAddBtn').style.display = 'none';
         showApp();
     } else {
-        errorMsg.textContent = '❌ كلمة المرور غير صحيحة';
+        document.getElementById('errorMessage').textContent = '❌ كلمة المرور غير صحيحة';
     }
 });
 
-// إمكانية الضغط على Enter
-document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') document.getElementById('loginBtn').click();
-});
+document.getElementById('passwordInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') document.getElementById('loginBtn').click(); });
 
 function showApp() { 
     document.getElementById('loginPage').style.display = 'none'; 
     document.getElementById('appContainer').style.display = 'block'; 
- 
+    loadData(); 
+    renderGames(); 
+    renderOffers(); 
+    if (currentUser === 'admin') renderAdminPanel(); 
+}
+
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    currentUser = null;
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('appContainer').style.display = 'none';
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('errorMessage').textContent = '';
+    document.getElementById('detailsPage').style.display = 'none';
+    document.getElementById('gamesPage').style.display = 'block';
+    document.getElementById('fabMenu').classList.remove('show');
+    document.getElementById('fabAddBtn').classList.remove('active');
+});
+
+// قائمة + العائمة
+const fabBtn = document.getElementById('fabAddBtn');
+const fabMenu = document.getElementById('fabMenu');
+
+fabBtn.addEventListener('click', function() {
+    fabMenu.classList.toggle('show');
+    fabBtn.classList.toggle('active');
+});
+
+document.getElementById('addGameOption').addEventListener('click', function() {
+    fabMenu.classList.remove('show');
+    fabBtn.classList.remove('active');
+    tempNewItems = [{ name: '', price: '' }];
+    document.getElementById('newGameName').value = '';
+    renderNewGameItems();
+    document.getElementById('addGameModal').style.display = 'flex';
+});
+
+document.getElementById('addOfferOption').addEventListener('click', function() {
+    fabMenu.classList.remove('show');
+    fabBtn.classList.remove('active');
+    document.getElementById('newOfferName').value = '';
+    document.getElementById('newOfferPrice').value = '';
+    document.getElementById('newOfferDesc').value = '';
+    document.getElementById('addOfferModal').style.display = 'flex';
+});
+
+// إغلاق القائمة عند الضغط بره
+document.addEventListener('click', function(e) {
+    if (!fabBtn.contains(e.target) && !fabMenu.contains(e.target)) {
+        fabMenu.classList.remove('show');
+        fabBtn.classList.remove('active');
+    }
+});
+
+// لوحة الأدمن
+document.getElementById('adminToggleBtn').addEventListener('click', function() {
+    document.getElementById('adminPanel').style.display = 'block';
+    renderAdminPanel();
+});
+document.getElementById('closeAdminPanelBtn').addEventListener('click', function() { document.getElementById('adminPanel').style.display = 'none'; });
+
+function renderAdminPanel() {
+    const l = document.getElementById('adminGameList'); l.innerHTML = '';
+    if (!gamesData.length) { l.innerHTML = '<div class="empty-state">لا توجد ألعاب</div>'; return; }
+    gamesData.forEach(g => {
+        const c = document.createElement('div'); c.className = 'admin-game-card';
+        let h = ''; g.items.forEach((it, i) => { h += `<div class="price-item"><span>${it.name}</span><input type="number" id="price_${g.id}_${i}" value="${it.price}" min="0"> ج.م</div>`; });
+        c.innerHTML = `<div class="admin-game-header"><h3>${g.name}</h3><button class="delete-game-btn" data-id="${g.id}"><i class="fas fa-trash"></i></button></div>${h}<button class="save-prices-btn" data-id="${g.id}"><i class="fas fa-save"></i> حفظ الأسعار</button>`;
+        l.appendChild(c);
+    });
+    document.querySelectorAll('.save-prices-btn').forEach(btn => btn.addEventListener('click', function() { saveGamePrices(parseInt(this.dataset.id)); }));
+    document.querySelectorAll('.delete-game-btn').forEach(btn => btn.addEventListener('click', function() { deleteGame(parseInt(this.dataset.id)); }));
+}
+
+function saveGamePrices(id) { 
+    const g = gamesData.find(x => x.id === id); if (!g) return; 
+    g.items.forEach((it, i) => { const inp = document.getElementById(`price_${id}_${i}`); if (inp) it.price = parseInt(inp.value) || 0; }); 
+    saveGamesData(); showToast('✅ تم حفظ الأسعار'); renderGames(); 
+}
+function deleteGame(id) { 
+    if (confirm('حذف اللعبة؟')) { gamesData = gamesData.filter(g => g.id !== id); saveGamesData(); renderGames(); renderAdminPanel(); showToast('🗑️ تم الحذف'); } 
+}
+
+// إضافة لعبة
+function renderNewGameItems() { 
+    const c = document.getElementById('newGameItems'); c.innerHTML = ''; 
+    tempNewItems.forEach((it, i) => { 
+        const r = document.createElement('div'); r.className = 'add-item-row'; 
+        r.innerHTML = `<input type="text" placeholder="اسم العنصر" value="${it.name}" data-index="${i}" data-field="name" dir="ltr"><input type="number" placeholder="السعر" value="${it.price}" data-index="${i}" data-field="price" style="width:100px" min="0">${tempNewItems.length>1?`<button class="remove-item-btn" data-index="${i}" style="background:#ff6b6b;border:none;border-radius:8px;padding:5px 10px;color:white;">×</button>`:''}`; 
+        c.appendChild(r); 
+    });
+    c.querySelectorAll('input[data-field="name"]').forEach(inp => inp.addEventListener('input', function() { tempNewItems[this.dataset.index].name = this.value; }));
+    c.querySelectorAll('input[data-field="price"]').forEach(inp => inp.addEventListener('input', function() { tempNewItems[this.dataset.index].price = parseInt(this.value) || 0; }));
+    c.querySelectorAll('.remove-item-btn').forEach(btn => btn.addEventListener('click', function() { tempNewItems.splice(this.dataset.index, 1); renderNewGameItems(); }));
+}
+
+document.getElementById('addNewItemBtn').addEventListener('click', function() { tempNewItems.push({ name: '', price: '' }); renderNewGameItems(); });
+document.getElementById('saveNewGameBtn').addEventListener('click', function() {
+    const n = document.getElementById('newGameName').value.trim(); if (!n) { showToast('❌ أدخل اسم اللعبة'); return; }
+    const v = tempNewItems.filter(i => i.name.trim() && i.price > 0); if (!v.length) { showToast('❌ أضف عنصر واحد'); return; }
+    gamesData.push({ id: Date.now(), name: n, items: v.map((it, idx) => ({ id: idx+1, name: it.name.trim(), price: it.price })) });
+    saveGamesData(); renderGames(); renderAdminPanel(); document.getElementById('addGameModal').style.display = 'none'; showToast('✅ تمت الإضافة');
+});
+document.getElementById('cancelAddGameBtn').addEventListener('click', function() { document.getElementById('addGameModal').style.display = 'none'; });
+document.getElementById('addGameModal').addEventListener('click', function(e) { if (e.target === this) this.style.display = 'none'; });
+
+// إضافة عرض
+document.getElementById('saveNewOfferBtn').addEventListener('click', function() {
+    const name = document.getElementById('newOfferName').value.trim();
+    const price = parseInt(document.getElementById('newOfferPrice').value) || 0;
+    const duration = document.getElementById('newOfferDuration').value;
+    const desc = document.getElementById('newOfferDesc').value.trim();
+    
+    if (!name) { showToast('❌ أدخل اسم العرض'); return; }
+    if (price <= 0) { showToast('❌ أدخل سعر صحيح'); return; }
+    
+    offersData.push({ id: Date.now(), name, price, duration, description: desc || 'عرض خاص' });
+    saveOffersData();
+    renderOffers();
+    document.getElementById('addOfferModal').style.display = 'none';
+    showToast('🔥 تم إضافة العرض');
+});
+document.getElementById('cancelAddOfferBtn').addEventListener('click', function() { document.getElementById('addOfferModal').style.display = 'none'; });
+document.getElementById('addOfferModal').addEventListener('click', function(e) { if (e.target === this) this.style.display = 'none'; });
+
+// عرض العروض
+function renderOffers() {
+    const grid = document.getElementById('offersGrid');
+    const section = document.getElementById('offersSection');
+    
+    if (!offersData.length) {
+        section.style.display = 'none';
+        return;
+    }
+    section.style.display = 'block';
+    grid.innerHTML = '';
+    
+    offersData.forEach(offer => {
+        const card = document.createElement('div');
+        card.className = 'offer-card';
+        card.addEventListener('click', () => selectOffer(offer));
+        card.innerHTML = `<h3>${offer.name}</h3><div class="offer-price">${offer.price} ج.م</div><div class="offer-duration"><i class="far fa-clock"></i> ${offer.duration}</div>`;
+        if (currentUser === 'admin') {
+            const delBtn = document.createElement('button');
+            delBtn.style.cssText = 'position:absolute;bottom:5px;left:5px;background:transparent;border:none;color:#ff6b6b;cursor:pointer;font-size:14px;';
+            delBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            delBtn.addEventListener('click', (e) => { e.stopPropagation(); deleteOffer(offer.id); });
+            card.appendChild(delBtn);
+        }
+        grid.appendChild(card);
+    });
+}
+
+function deleteOffer(id) {
+    if (confirm('حذف العرض؟')) {
+        offersData = offersData.filter(o => o.id !== id);
+        saveOffersData();
+        renderOffers();
+        showToast('🗑️ تم حذف العرض');
+    }
+}
+
+function selectOffer(offer) {
+    selectedItem = { name: offer.name, price: offer.price, isOffer: true, duration: offer.duration };
+    selectedGame = { name: 'عرض خاص' };
+    document.getElementById('gameTitle').textContent = offer.name;
+    document.getElementById('gamesPage').style.display = 'none';
+    document.getElementById('detailsPage').style.display = 'block';
+    document.getElementById('itemsGrid').innerHTML = '';
+    document.getElementById('playerId').value = '';
+    document.getElementById('buyBtn').disabled = true;
+}
+
+// عرض الألعاب
+function renderGames() { 
+    const g = document.getElementById('gamesGrid'); g.innerHTML = ''; 
+    if (!gamesData.length) { g.innerHTML = '<div class="empty-state">لا توجد ألعاب</div>'; return; } 
+    gamesData.forEach(gm => { 
+        const c = document.createElement('div'); c.className = 'game-card'; 
+        c.addEventListener('click', () => selectGame(gm)); 
+        c.innerHTML = `<h3>${gm.name}</h3>`; g.appendChild(c); 
+    }); 
+}
+
+function selectGame(g) { 
+    selectedGame = JSON.parse(JSON.stringify(g)); 
+    document.getElementById('gameTitle').textContent = g.name; 
+    document.getElementById('playerId').value = ''; 
+    document.getElementById('buyBtn').disabled = true; 
+    selectedItem = null; 
+    renderGameItems(); 
+    document.getElementById('gamesPage').style.display = 'none'; 
+    document.getElementById('detailsPage').style.display = 'block'; 
+}
+
+function renderGameItems() { 
+    const g = document.getElementById('itemsGrid'); g.innerHTML = ''; 
+    selectedGame.items.forEach(it => { 
+        const c = document.createElement('div'); c.className = 'item-card'; 
+        c.addEventListener('click', () => selectItem(it, c)); 
+        c.innerHTML = `<div class="item-name">${it.name}</div><div class="item-price">${it.price} ج.م</div>`; 
+        g.appendChild(c); 
+    }); 
+}
+
+function selectItem(it, el) { 
+    selectedItem = it; 
+    document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected')); 
+    el.classList.add('selected'); 
+    checkBuyButton(); 
+}
+
+function checkBuyButton() { 
+    const id = document.getElementById('playerId').value; 
+    document.getElementById('buyBtn').disabled = !id || id.length < 3 || !selectedItem; 
+}
+
+document.getElementById('playerId').addEventListener('input', checkBuyButton);
+document.getElementById('backToGamesBtn').addEventListener('click', function() { 
+    document.getElementById('detailsPage').style.display = 'none'; 
+    document.getElementById('gamesPage').style.display = 'block'; 
+    selectedItem = null;
+});
+
+// الدفع
+document.getElementById('buyBtn').addEventListener('click', function() {
+    const id = document.getElementById('playerId').value;
+    if (!id || !selectedItem) return;
+    currentPlayerId = id;
+    
+    const itemName = selectedItem.isOffer ? `🔥 ${selectedItem.name} (${selectedItem.duration})` : selectedItem.name;
+    const orderHtml = `<p><strong>اللعبة/العرض:</strong> ${selectedGame.name}</p><p><strong>ID:</strong> <span dir="ltr">${id}</span></p><p><strong>القيمة:</strong> ${itemName}</p><p><strong>المبلغ:</strong> ${selectedItem.price} ج.م</p>`;
+    document.getElementById('step1OrderDetails').innerHTML = orderHtml;
+    document.getElementById('step2OrderDetails').innerHTML = orderHtml;
+    
+    document.getElementById('step1').style.display = 'block';
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step3').style.display = 'none';
+    document.getElementById('paymentModal').style.display = 'flex';
+});
+
+document.getElementById('goToStep2Btn').addEventListener('click', function() {
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'block';
+});
+
+document.getElementById('backToStep1Btn').addEventListener('click', function() {
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step1').style.display = 'block';
+});
+
+document.getElementById('cancelStep1Btn').addEventListener('click', function() { document.getElementById('paymentModal').style.display = 'none'; });
+document.getElementById('copyVodafoneBtn').addEventListener('click', function() { navigator.clipboard?.writeText('01040199135'); showToast('📋 تم نسخ الرقم'); });
+
+document.getElementById('goToStep3Btn').addEventListener('click', async function() {
+    const itemName = selectedItem.isOffer ? `🔥 ${selectedItem.name} (${selectedItem.duration})` : selectedItem.name;
+    const msg = `📮 *طلب شحن جديد*\n🎮 *${selectedItem.isOffer ? 'العرض' : 'اللعبة'}*: ${selectedGame.name}\n🆔 *ID:* \`${currentPlayerId}\`\n💎 *القيمة:* ${itemName}\n💰 *المبلغ:* ${selectedItem.price} ج.م`;
+    try { await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg, parse_mode: 'Markdown' }) }); } catch(e) {}
+    
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step3').style.display = 'block';
+});
+
+document.getElementById('closeModalBtn').addEventListener('click', function() {
+    document.getElementById('paymentModal').style.display = 'none';
+    document.getElementById('detailsPage').style.display = 'none';
+    document.getElementById('gamesPage').style.display = 'block';
+});
+
+document.getElementById('paymentModal').addEventListener('click', function(e) { if (e.target === this) { this.style.display = 'none'; document.getElementById('detailsPage').style.display = 'none'; document.getElementById('gamesPage').style.display = 'block'; }});
+
+loadData();
+</script>
+</body>
+</html>
