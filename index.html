@@ -160,8 +160,6 @@
             display: none;
             min-height: 100vh;
             background: #0a0a0f;
-            position: relative;
-            padding-bottom: 80px;
         }
 
         .main-header {
@@ -179,6 +177,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .header-content h1 {
@@ -192,7 +192,8 @@
         .user-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         #userRoleDisplay {
@@ -203,7 +204,7 @@
             color: #d000ff;
         }
 
-        .logout-btn, .admin-toggle-btn {
+        .logout-btn, .admin-toggle-btn, .add-game-btn {
             background: transparent;
             border: 1px solid #d000ff;
             color: #d000ff;
@@ -217,34 +218,19 @@
             transition: all 0.3s;
         }
 
+        .add-game-btn {
+            background: linear-gradient(90deg, #8a00ff, #d000ff);
+            color: white;
+            border: none;
+        }
+
         .logout-btn:hover, .admin-toggle-btn:hover {
             background: #d000ff;
             color: white;
         }
 
-        /* ========== زرار إضافة لعبة (عائم) ========== */
-        .fab-add {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(90deg, #8a00ff, #d000ff);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 30px;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 25px rgba(208, 0, 255, 0.5);
-            z-index: 200;
-            transition: all 0.3s;
-        }
-
-        .fab-add:hover {
-            transform: scale(1.1);
+        .add-game-btn:hover {
+            opacity: 0.85;
         }
 
         /* ========== لوحة تحكم الأدمن ========== */
@@ -290,25 +276,26 @@
 
         .admin-game-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         .admin-game-card {
             background: #181822;
-            border-radius: 18px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 22px;
+            border: 1px solid rgba(255,255,255,0.03);
         }
 
         .admin-game-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .admin-game-header h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #FFD700;
         }
 
@@ -317,7 +304,7 @@
             border: none;
             color: #ff6b6b;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .delete-game-btn:hover {
@@ -328,36 +315,38 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             padding: 8px 0;
             border-bottom: 1px dashed rgba(255,255,255,0.05);
         }
 
         .price-item span {
             color: #a0a0b0;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .price-item input {
-            width: 90px;
+            width: 100px;
             background: #0a0a0f;
             border: 1px solid #d000ff;
-            border-radius: 8px;
-            padding: 8px 10px;
+            border-radius: 10px;
+            padding: 8px 12px;
             color: white;
             text-align: left;
             direction: ltr;
+            font-size: 1rem;
         }
 
         .save-prices-btn {
             width: 100%;
-            margin-top: 18px;
-            padding: 12px;
+            margin-top: 20px;
+            padding: 14px;
             background: linear-gradient(90deg, #8a00ff, #d000ff);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
         }
 
@@ -377,10 +366,10 @@
         }
 
         .add-game-content {
-            max-width: 480px;
+            max-width: 500px;
             width: 100%;
             background: #181822;
-            border-radius: 28px;
+            border-radius: 30px;
             padding: 30px 25px;
             border: 1px solid #d000ff;
         }
@@ -403,13 +392,13 @@
             padding: 14px;
             background: #0a0a0f;
             border: 1px solid #d000ff;
-            border-radius: 14px;
+            border-radius: 16px;
             color: white;
             font-size: 1rem;
         }
 
         .items-list-container {
-            max-height: 220px;
+            max-height: 250px;
             overflow-y: auto;
             margin: 20px 0;
         }
@@ -430,7 +419,7 @@
             color: white;
             border: none;
             padding: 12px 20px;
-            border-radius: 14px;
+            border-radius: 16px;
             cursor: pointer;
             width: 100%;
             font-weight: 600;
@@ -446,7 +435,7 @@
             flex: 1;
             padding: 15px;
             border: none;
-            border-radius: 14px;
+            border-radius: 16px;
             font-weight: 600;
             cursor: pointer;
         }
@@ -462,7 +451,13 @@
             color: #d000ff;
         }
 
-        /* ========== صفحة الألعاب (بدون صور) ========== */
+        .empty-state {
+            text-align: center;
+            color: #a0a0b0;
+            padding: 50px;
+        }
+
+        /* ========== صفحة الألعاب ========== */
         .games-container {
             max-width: 1200px;
             margin: 30px auto;
@@ -478,14 +473,14 @@
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
         }
 
         .game-card {
             background: #181822;
             border-radius: 20px;
-            padding: 28px 15px;
+            padding: 30px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -493,12 +488,13 @@
         }
 
         .game-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
             border-color: #d000ff;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         .game-card h3 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: white;
         }
 
@@ -559,6 +555,7 @@
             font-size: 1.1rem;
             text-align: left;
             direction: ltr;
+            transition: border 0.3s;
         }
 
         .player-id-section input:focus {
@@ -624,6 +621,7 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
+            transition: all 0.3s;
         }
 
         .buy-btn:disabled {
@@ -781,11 +779,14 @@
             z-index: 2000;
             display: none;
         }
-
-        .empty-state {
-            text-align: center;
-            color: #a0a0b0;
-            padding: 50px;
-        }
     </style>
-    
+</head>
+<body>
+
+<!-- ========== صفحة تسجيل الدخول ========== -->
+<div id="loginPage" class="login-container">
+    <div class="login-card">
+        <h2>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h2>
+        
+        <form id="loginForm">
+            <i
