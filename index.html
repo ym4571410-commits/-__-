@@ -22,7 +22,7 @@
         .input-box { width: 100%; padding: 14px 18px; margin: 12px 0; border: 2px solid transparent; border-radius: 14px; background: #1f1f2e; color: white; font-size: 16px; outline: none; direction: rtl; text-align: right; }
         .input-box:focus { border-color: #d000ff; }
         .btn { width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 14px; background: linear-gradient(90deg, #8a00ff, #d000ff); color: white; font-size: 18px; font-weight: 700; cursor: pointer; }
-        .error-message { color: #ff6b6b; margin-top: 15px; }
+        .error-message { color: #ff6b6b; margin-top: 15px; min-height: 24px; }
         .telegram-link-box { margin-top: 25px; padding: 15px; background: rgba(0,136,204,0.1); border-radius: 16px; border: 1px solid #0088cc; }
         .telegram-link { color: #0088cc; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
 
@@ -109,13 +109,12 @@
 </head>
 <body>
 
+<!-- صفحة تسجيل الدخول -->
 <div id="loginPage" class="login-container">
     <div class="login-card">
         <h2>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h2>
-        <form onsubmit="return false;">
-            <input type="password" id="passwordInput" class="input-box" placeholder="كلمة المرور" required>
-            <button class="btn" onclick="handleLogin()">LOGIN SECURELY →</button>
-        </form>
+        <input type="password" id="passwordInput" class="input-box" placeholder="كلمة المرور" required>
+        <button class="btn" onclick="handleLogin()">LOGIN SECURELY →</button>
         <div id="errorMessage" class="error-message"></div>
         <div class="telegram-link-box">
             <a href="https://t.me/QB_VJ" target="_blank" class="telegram-link">
@@ -125,6 +124,7 @@
     </div>
 </div>
 
+<!-- التطبيق الرئيسي -->
 <div id="appContainer" class="app-container">
     <header class="main-header">
         <div class="header-content">
@@ -137,6 +137,7 @@
         </div>
     </header>
 
+    <!-- لوحة تحكم الأدمن -->
     <div id="adminPanel" class="admin-panel">
         <div class="panel-header">
             <h2><i class="fas fa-sliders-h"></i> تعديل الأسعار</h2>
@@ -145,6 +146,7 @@
         <div class="admin-game-list" id="adminGameList"></div>
     </div>
 
+    <!-- مودال إضافة لعبة -->
     <div id="addGameModal" class="add-game-modal" onclick="if(event.target===this)closeAddGameModal()">
         <div class="add-game-content">
             <h2><i class="fas fa-plus-circle"></i> إضافة لعبة جديدة</h2>
@@ -160,6 +162,7 @@
         </div>
     </div>
 
+    <!-- صفحة الألعاب -->
     <div id="gamesPage">
         <main class="games-container">
             <h2 class="section-title">اختر لعبتك المفضلة</h2>
@@ -167,6 +170,7 @@
         </main>
     </div>
 
+    <!-- صفحة تفاصيل اللعبة -->
     <div id="detailsPage" style="display: none;">
         <button class="back-btn" onclick="backToGames()"><i class="fas fa-arrow-right"></i> رجوع للألعاب</button>
         <div class="detail-header"><h1 id="gameTitle"></h1><div></div></div>
@@ -181,9 +185,11 @@
         </main>
     </div>
 
+    <!-- زرار إضافة لعبة عائم -->
     <button id="fabAddBtn" class="fab-add" onclick="openAddGameModal()"><i class="fas fa-plus"></i></button>
 </div>
 
+<!-- مودال الدفع -->
 <div id="paymentModal" class="modal" onclick="if(event.target===this)closePaymentModal()">
     <div class="modal-content">
         <div id="paymentStep">
@@ -210,46 +216,260 @@
 <div id="toast" class="toast-message"></div>
 
 <script>
+// بيانات التطبيق
 const TELEGRAM_BOT_TOKEN = '8667816880:AAH0sb2Rdo1xtuZaJhmWYYmrJ2Jyj2YFUvI';
 const TELEGRAM_CHAT_ID = '8397243250';
 let currentUser = null, selectedGame = null, selectedItem = null, gamesData = [], tempNewItems = [];
 
+// الألعاب الافتراضية
 const defaultGames = [
     { id: 1, name: 'Free Fire', items: [{ id: 1, name: '100 Diamond', price: 50 }, { id: 2, name: '520 Diamond', price: 250 }, { id: 3, name: '1060 Diamond', price: 500 }] },
     { id: 2, name: 'PUBG Mobile', items: [{ id: 1, name: '60 UC', price: 60 }, { id: 2, name: '300 UC', price: 300 }, { id: 3, name: '600 UC', price: 600 }] }
 ];
 
-function loadGamesData() { const s = localStorage.getItem('madmoun_games_data'); gamesData = s ? JSON.parse(s) : JSON.parse(JSON.stringify(defaultGames)); if (!s) saveGamesData(); }
+// تحميل وحفظ البيانات
+function loadGamesData() { 
+    const s = localStorage.getItem('madmoun_games_data'); 
+    gamesData = s ? JSON.parse(s) : JSON.parse(JSON.stringify(defaultGames)); 
+    if (!s) saveGamesData(); 
+}
 function saveGamesData() { localStorage.setItem('madmoun_games_data', JSON.stringify(gamesData)); }
-function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
+function showToast(m) { 
+    const t = document.getElementById('toast'); 
+    t.textContent = m; 
+    t.style.display = 'block'; 
+    setTimeout(() => t.style.display = 'none', 3000); 
+}
 
+// تسجيل الدخول
 window.handleLogin = function() {
-    const p = document.getElementById('passwordInput').value;
-    if (p === '@YOUSSEF1234') { currentUser = 'admin'; document.getElementById('userRoleDisplay').textContent = 'أدمن'; document.getElementById('adminToggleBtn').style.display = 'flex'; document.getElementById('fabAddBtn').style.display = 'flex'; showApp(); }
-    else if (p === 'madmoun') { currentUser = 'user'; document.getElementById('userRoleDisplay').textContent = 'زائر'; document.getElementById('adminToggleBtn').style.display = 'none'; document.getElementById('fabAddBtn').style.display = 'none'; showApp(); }
-    else document.getElementById('errorMessage').textContent = '❌ كلمة المرور غير صحيحة';
+    const password = document.getElementById('passwordInput').value;
+    const errorMsg = document.getElementById('errorMessage');
+    
+    if (password === '@YOUSSEF1234') {
+        currentUser = 'admin';
+        document.getElementById('userRoleDisplay').textContent = 'أدمن';
+        document.getElementById('adminToggleBtn').style.display = 'flex';
+        document.getElementById('fabAddBtn').style.display = 'flex';
+        showApp();
+    } else if (password === 'madmoun') {
+        currentUser = 'user';
+        document.getElementById('userRoleDisplay').textContent = 'زائر';
+        document.getElementById('adminToggleBtn').style.display = 'none';
+        document.getElementById('fabAddBtn').style.display = 'none';
+        showApp();
+    } else {
+        errorMsg.textContent = '❌ كلمة المرور غير صحيحة';
+    }
 };
 
-function showApp() { document.getElementById('loginPage').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; loadGamesData(); renderGames(); if (currentUser === 'admin') renderAdminPanel(); }
-window.logout = function() { currentUser = null; document.getElementById('loginPage').style.display = 'flex'; document.getElementById('appContainer').style.display = 'none'; document.getElementById('passwordInput').value = ''; document.getElementById('detailsPage').style.display = 'none'; document.getElementById('gamesPage').style.display = 'block'; };
-window.openAdminPanel = function() { document.getElementById('adminPanel').style.display = 'block'; renderAdminPanel(); };
-window.closeAdminPanel = function() { document.getElementById('adminPanel').style.display = 'none'; };
+function showApp() { 
+    document.getElementById('loginPage').style.display = 'none'; 
+    document.getElementById('appContainer').style.display = 'block'; 
+    loadGamesData(); 
+    renderGames(); 
+    if (currentUser === 'admin') renderAdminPanel(); 
+}
+
+window.logout = function() { 
+    currentUser = null; 
+    document.getElementById('loginPage').style.display = 'flex'; 
+    document.getElementById('appContainer').style.display = 'none'; 
+    document.getElementById('passwordInput').value = ''; 
+    document.getElementById('errorMessage').textContent = ''; 
+    document.getElementById('detailsPage').style.display = 'none'; 
+    document.getElementById('gamesPage').style.display = 'block'; 
+};
+
+// لوحة الأدمن
+window.openAdminPanel = function() { 
+    document.getElementById('adminPanel').style.display = 'block'; 
+    renderAdminPanel(); 
+};
+window.closeAdminPanel = function() { 
+    document.getElementById('adminPanel').style.display = 'none'; 
+};
 
 function renderAdminPanel() {
-    const l = document.getElementById('adminGameList'); l.innerHTML = '';
-    if (!gamesData.length) { l.innerHTML = '<div class="empty-state">لا توجد ألعاب</div>'; return; }
+    const l = document.getElementById('adminGameList'); 
+    l.innerHTML = '';
+    if (!gamesData.length) { 
+        l.innerHTML = '<div class="empty-state">لا توجد ألعاب</div>'; 
+        return; 
+    }
     gamesData.forEach(g => {
-        const c = document.createElement('div'); c.className = 'admin-game-card';
-        let h = ''; g.items.forEach((it, i) => { h += `<div class="price-item"><span>${it.name}</span><input type="number" id="price_${g.id}_${i}" value="${it.price}" min="0"> ج.م</div>`; });
+        const c = document.createElement('div'); 
+        c.className = 'admin-game-card';
+        let h = ''; 
+        g.items.forEach((it, i) => { 
+            h += `<div class="price-item"><span>${it.name}</span><input type="number" id="price_${g.id}_${i}" value="${it.price}" min="0"> ج.م</div>`; 
+        });
         c.innerHTML = `<div class="admin-game-header"><h3>${g.name}</h3><button class="delete-game-btn" onclick="deleteGame(${g.id})"><i class="fas fa-trash"></i></button></div>${h}<button class="save-prices-btn" onclick="saveGamePrices(${g.id})"><i class="fas fa-save"></i> حفظ الأسعار</button>`;
         l.appendChild(c);
     });
 }
 
-window.saveGamePrices = function(id) { const g = gamesData.find(x => x.id === id); if (!g) return; g.items.forEach((it, i) => { const inp = document.getElementById(`price_${id}_${i}`); if (inp) it.price = parseInt(inp.value) || 0; }); saveGamesData(); showToast('✅ تم حفظ الأسعار'); renderGames(); };
-window.deleteGame = function(id) { if (confirm('حذف اللعبة؟')) { gamesData = gamesData.filter(g => g.id !== id); saveGamesData(); renderGames(); renderAdminPanel(); showToast('🗑️ تم الحذف'); } };
-window.openAddGameModal = function() { tempNewItems = [{ name: '', price: '' }]; document.getElementById('newGameName').value = ''; renderNewGameItems(); document.getElementById('addGameModal').style.display = 'flex'; };
+window.saveGamePrices = function(id) { 
+    const g = gamesData.find(x => x.id === id); 
+    if (!g) return; 
+    g.items.forEach((it, i) => { 
+        const inp = document.getElementById(`price_${id}_${i}`); 
+        if (inp) it.price = parseInt(inp.value) || 0; 
+    }); 
+    saveGamesData(); 
+    showToast('✅ تم حفظ الأسعار'); 
+    renderGames(); 
+};
+
+window.deleteGame = function(id) { 
+    if (confirm('حذف اللعبة؟')) { 
+        gamesData = gamesData.filter(g => g.id !== id); 
+        saveGamesData(); 
+        renderGames(); 
+        renderAdminPanel(); 
+        showToast('🗑️ تم الحذف'); 
+    } 
+};
+
+// إضافة لعبة جديدة
+window.openAddGameModal = function() { 
+    tempNewItems = [{ name: '', price: '' }]; 
+    document.getElementById('newGameName').value = ''; 
+    renderNewGameItems(); 
+    document.getElementById('addGameModal').style.display = 'flex'; 
+};
 
 function renderNewGameItems() {
-    const c = document.getElementById('newGameItems'); c.innerHTML = '';
-    tempNewItems.forEach((it, i) => { const r = document.createElement('div'); r.className = 'add-item-row'; r.innerHTML = `<input type="text" placeholder="اسم العنصر" value="${i
+    const c = document.getElementById('newGameItems'); 
+    c.innerHTML = '';
+    tempNewItems.forEach((it, i) => { 
+        const r = document.createElement('div'); 
+        r.className = 'add-item-row'; 
+        r.innerHTML = `<input type="text" placeholder="اسم العنصر" value="${it.name}" onchange="updateTempItem(${i},'name',this.value)" dir="ltr"><input type="number" placeholder="السعر" value="${it.price}" onchange="updateTempItem(${i},'price',this.value)" style="width:100px" min="0">${tempNewItems.length>1?`<button onclick="removeTempItem(${i})" style="background:#ff6b6b;border:none;border-radius:8px;padding:5px 10px;color:white;">×</button>`:''}`; 
+        c.appendChild(r); 
+    });
+}
+
+window.updateTempItem = function(i, f, v) { 
+    tempNewItems[i][f] = f === 'price' ? parseInt(v) || 0 : v; 
+};
+window.addNewItemRow = function() { 
+    tempNewItems.push({ name: '', price: '' }); 
+    renderNewGameItems(); 
+};
+window.removeTempItem = function(i) { 
+    tempNewItems.splice(i, 1); 
+    renderNewGameItems(); 
+};
+window.saveNewGame = function() {
+    const n = document.getElementById('newGameName').value.trim(); 
+    if (!n) { showToast('❌ أدخل اسم اللعبة'); return; }
+    const v = tempNewItems.filter(i => i.name.trim() && i.price > 0); 
+    if (!v.length) { showToast('❌ أضف عنصر واحد'); return; }
+    gamesData.push({ id: Date.now(), name: n, items: v.map((it, idx) => ({ id: idx+1, name: it.name.trim(), price: it.price })) });
+    saveGamesData(); 
+    renderGames(); 
+    renderAdminPanel(); 
+    closeAddGameModal(); 
+    showToast('✅ تمت الإضافة');
+};
+window.closeAddGameModal = function() { 
+    document.getElementById('addGameModal').style.display = 'none'; 
+};
+
+// عرض الألعاب
+function renderGames() {
+    const g = document.getElementById('gamesGrid'); 
+    g.innerHTML = '';
+    if (!gamesData.length) { 
+        g.innerHTML = '<div class="empty-state">لا توجد ألعاب</div>'; 
+        return; 
+    }
+    gamesData.forEach(gm => { 
+        const c = document.createElement('div'); 
+        c.className = 'game-card'; 
+        c.onclick = () => selectGame(gm); 
+        c.innerHTML = `<h3>${gm.name}</h3>`; 
+        g.appendChild(c); 
+    });
+}
+
+function selectGame(g) { 
+    selectedGame = JSON.parse(JSON.stringify(g)); 
+    document.getElementById('gameTitle').textContent = g.name; 
+    document.getElementById('playerId').value = ''; 
+    document.getElementById('buyBtn').disabled = true; 
+    selectedItem = null; 
+    renderGameItems(); 
+    document.getElementById('gamesPage').style.display = 'none'; 
+    document.getElementById('detailsPage').style.display = 'block'; 
+}
+
+function renderGameItems() { 
+    const g = document.getElementById('itemsGrid'); 
+    g.innerHTML = ''; 
+    selectedGame.items.forEach(it => { 
+        const c = document.createElement('div'); 
+        c.className = 'item-card'; 
+        c.onclick = () => selectItem(it, c); 
+        c.innerHTML = `<div class="item-name">${it.name}</div><div class="item-price">${it.price} ج.م</div>`; 
+        g.appendChild(c); 
+    }); 
+}
+
+function selectItem(it, el) { 
+    selectedItem = it; 
+    document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected')); 
+    el.classList.add('selected'); 
+    checkBuyButton(); 
+}
+
+window.checkBuyButton = function() { 
+    const id = document.getElementById('playerId').value; 
+    document.getElementById('buyBtn').disabled = !id || id.length < 3 || !selectedItem; 
+};
+
+window.backToGames = function() { 
+    document.getElementById('detailsPage').style.display = 'none'; 
+    document.getElementById('gamesPage').style.display = 'block'; 
+};
+
+// الدفع
+window.showPaymentModal = function() {
+    const id = document.getElementById('playerId').value; 
+    if (!id || !selectedItem) return;
+    document.getElementById('orderSummary').innerHTML = `<p><strong>اللعبة:</strong> ${selectedGame.name}</p><p><strong>ID:</strong> <span dir="ltr">${id}</span></p><p><strong>القيمة:</strong> ${selectedItem.name}</p><p><strong>المبلغ:</strong> ${selectedItem.price} ج.م</p>`;
+    document.getElementById('paymentStep').style.display = 'block'; 
+    document.getElementById('pendingStep').style.display = 'none'; 
+    document.getElementById('paymentModal').style.display = 'flex';
+};
+
+window.copyVodafoneNumber = function() { 
+    navigator.clipboard?.writeText('01040199135'); 
+    showToast('📋 تم نسخ الرقم'); 
+};
+
+window.confirmTransfer = async function() {
+    const id = document.getElementById('playerId').value;
+    const m = `📮 *طلب شحن جديد*\n🎮 *اللعبة:* ${selectedGame.name}\n🆔 *ID:* \`${id}\`\n💎 *القيمة:* ${selectedItem.name}\n💰 *المبلغ:* ${selectedItem.price} ج.م`;
+    try { 
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: m, parse_mode: 'Markdown' }) 
+        }); 
+    } catch(e) {}
+    document.getElementById('paymentStep').style.display = 'none'; 
+    document.getElementById('pendingStep').style.display = 'block';
+};
+
+window.closePaymentModal = function() { 
+    document.getElementById('paymentModal').style.display = 'none'; 
+    backToGames(); 
+};
+
+// بدء التطبيق
+loadGamesData();
+</script>
+</body>
+</html>
