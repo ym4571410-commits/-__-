@@ -11,730 +11,155 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        :root {
-            --gold: #FFD700;
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #181822;
-            --text-white: #FFFFFF;
-            --text-gray: #a0a0b0;
-            --accent: #45A29E;
-            --success: #00C853;
-            --error: #FF3D00;
-            --vodafone: #E60000;
-            --border-radius: 24px;
-        }
-
-        body {
-            background: var(--bg-primary);
-            min-height: 100vh;
-            color: var(--text-white);
-        }
-
-        /* ========== صفحة تسجيل الدخول (تصميمك) ========== */
-        .login-container {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1a002a, #3b0066);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-card {
-            background: #2b004d;
-            padding: 35px 30px;
-            border-radius: 25px;
-            width: 340px;
-            box-shadow: 0 0 30px rgba(128, 0, 255, 0.6);
-            text-align: center;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .login-card h2 {
-            color: #fff;
-            margin-bottom: 25px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            font-size: 1.8rem;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        }
-
-        .input-box {
-            width: 100%;
-            padding: 14px 18px;
-            margin: 12px 0;
-            border: 2px solid transparent;
-            border-radius: 14px;
-            background: #1f1f2e;
-            color: white;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s;
-            direction: rtl;
-            text-align: right;
-        }
-
-        .input-box:focus {
-            border-color: #d000ff;
-            box-shadow: 0 0 10px rgba(208, 0, 255, 0.3);
-        }
-
-        .input-box::placeholder {
-            color: #888;
-            font-size: 14px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(90deg, #8a00ff, #d000ff);
-            color: white;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            opacity: 0.85;
-            transform: scale(1.02);
-        }
-
-        .error-message {
-            color: #ff6b6b;
-            text-align: center;
-            margin-top: 18px;
-            min-height: 24px;
-            font-size: 14px;
-        }
-
-        /* رابط تيليجرام */
-        .telegram-link-box {
-            margin-top: 25px;
-            padding: 15px;
-            background: rgba(0, 136, 204, 0.1);
-            border-radius: 16px;
-            border: 1px solid #0088cc;
-        }
-
-        .telegram-link {
-            color: #0088cc;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .telegram-link:hover {
-            color: white;
-            background: #0088cc;
-            padding: 8px;
-            border-radius: 12px;
-        }
-
-        .telegram-link i {
-            font-size: 20px;
-        }
-
-        /* ========== التطبيق الرئيسي ========== */
-        .app-container {
-            display: none;
-            min-height: 100vh;
-            background: #0a0a0f;
-        }
-
-        .main-header {
-            background: #12121a;
-            padding: 16px 20px;
-            border-bottom: 2px solid #d000ff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .header-content h1 {
-            font-size: 1.4rem;
-            color: #FFD700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .user-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        #userRoleDisplay {
-            background: rgba(208, 0, 255, 0.15);
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            color: #d000ff;
-        }
-
-        .logout-btn, .admin-toggle-btn {
-            background: transparent;
-            border: 1px solid #d000ff;
-            color: #d000ff;
-            padding: 8px 16px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover, .admin-toggle-btn:hover {
-            background: #d000ff;
-            color: white;
-        }
-
-        /* ========== لوحة تحكم الأدمن ========== */
-        .admin-panel {
-            background: #12121a;
-            margin: 20px auto;
-            max-width: 1200px;
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(208, 0, 255, 0.3);
-            display: none;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid rgba(208, 0, 255, 0.2);
-        }
-
-        .panel-header h2 {
-            color: #FFD700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-        }
-
-        .close-panel {
-            background: transparent;
-            border: none;
-            color: #a0a0b0;
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close-panel:hover {
-            color: #ff6b6b;
-        }
-
-        .admin-game-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .admin-game-card {
-            background: #181822;
-            border-radius: 20px;
-            padding: 22px;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .admin-game-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .admin-game-header img {
-            width: 55px;
-            height: 55px;
-            border-radius: 16px;
-            object-fit: cover;
-        }
-
-        .admin-game-header h3 {
-            font-size: 1.2rem;
-        }
-
-        .price-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            padding: 8px 0;
-            border-bottom: 1px dashed rgba(255,255,255,0.05);
-        }
-
-        .price-item span {
-            color: #a0a0b0;
-            font-size: 0.95rem;
-        }
-
-        .price-item input {
-            width: 100px;
-            background: #0a0a0f;
-            border: 1px solid #d000ff;
-            border-radius: 10px;
-            padding: 8px 12px;
-            color: white;
-            text-align: left;
-            direction: ltr;
-            font-size: 1rem;
-        }
-
-        .save-prices-btn {
-            width: 100%;
-            margin-top: 20px;
-            padding: 14px;
-            background: linear-gradient(90deg, #8a00ff, #d000ff);
-            border: none;
-            border-radius: 14px;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        /* ========== صفحة الألعاب ========== */
-        .games-container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: #FFD700;
-            text-align: center;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-        }
-
-        .game-card {
-            background: #181822;
-            border-radius: 24px;
-            padding: 22px 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .game-card:hover {
-            transform: translateY(-6px);
-            border-color: #d000ff;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-        }
-
-        .game-card img {
-            width: 85px;
-            height: 85px;
-            border-radius: 22px;
-            object-fit: cover;
-            margin-bottom: 14px;
-        }
-
-        .game-card h3 {
-            font-size: 1rem;
-            color: white;
-        }
-
-        /* ========== صفحة تفاصيل اللعبة ========== */
-        .back-btn {
-            background: transparent;
-            border: none;
-            color: #d000ff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 18px 22px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .detail-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 5px 20px;
-            background: #12121a;
-        }
-
-        .detail-header h1 {
-            font-size: 1.6rem;
-            color: #FFD700;
-        }
-
-        .detail-container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 0 20px 35px;
-        }
-
-        .game-banner {
-            width: 100%;
-            height: 180px;
-            border-radius: 30px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        .game-banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .player-id-section {
-            background: #181822;
-            padding: 22px;
-            border-radius: 24px;
-            margin-bottom: 30px;
-        }
-
-        .player-id-section label {
-            display: block;
-            margin-bottom: 14px;
-            color: #d000ff;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .player-id-section input {
-            width: 100%;
-            padding: 18px;
-            background: #0a0a0f;
-            border: 2px solid #12121a;
-            border-radius: 18px;
-            color: white;
-            font-size: 1.1rem;
-            text-align: left;
-            direction: ltr;
-            transition: border 0.3s;
-        }
-
-        .player-id-section input:focus {
-            border-color: #d000ff;
-            outline: none;
-        }
-
-        .items-title {
-            font-size: 1.4rem;
-            margin-bottom: 18px;
-            color: #FFD700;
-        }
-
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-
-        .item-card {
-            background: #181822;
-            padding: 20px 10px;
-            border-radius: 20px;
-            text-align: center;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .item-card:hover {
-            border-color: #d000ff;
-        }
-
-        .item-card.selected {
-            border-color: #d000ff;
-            background: rgba(208, 0, 255, 0.1);
-        }
-
-        .item-name {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .item-price {
-            color: #FFD700;
-            font-weight: 700;
-            font-size: 1.3rem;
-        }
-
-        .buy-btn {
-            width: 100%;
-            margin-top: 35px;
-            padding: 20px;
-            background: linear-gradient(90deg, #8a00ff, #d000ff);
-            border: none;
-            border-radius: 60px;
-            color: white;
-            font-size: 1.4rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            transition: all 0.3s;
-        }
-
-        .buy-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        /* ========== مودال الدفع ========== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            max-width: 460px;
-            width: 100%;
-            background: #181822;
-            border-radius: 36px;
-            padding: 35px 25px;
-            text-align: center;
-            border: 1px solid #d000ff;
-        }
-
-        .modal-icon {
-            font-size: 55px;
-            color: #FFD700;
-            margin-bottom: 25px;
-        }
-
-        .modal-content h2 {
-            color: #FFD700;
-            margin-bottom: 28px;
-            font-size: 1.8rem;
-        }
-
-        .vodafone-box {
-            background: #0a0a0f;
-            padding: 28px;
-            border-radius: 24px;
-            border: 2px solid #E60000;
-            margin-bottom: 30px;
-        }
-
-        .vodafone-logo {
-            color: #E60000;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .vodafone-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: white;
-            letter-spacing: 4px;
-            direction: ltr;
-            margin-bottom: 20px;
-        }
-
-        .copy-btn {
-            background: #E60000;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .order-summary {
-            background: rgba(208, 0, 255, 0.06);
-            padding: 18px;
-            border-radius: 18px;
-            margin-bottom: 28px;
-            text-align: right;
-        }
-
-        .order-summary p {
-            margin-bottom: 10px;
-            color: #a0a0b0;
-        }
-
-        .order-summary strong {
-            color: #FFD700;
-        }
-
-        .confirm-transfer-btn {
-            width: 100%;
-            padding: 18px;
-            background: #00C853;
-            border: none;
-            border-radius: 60px;
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .pending-message {
-            display: none;
-            text-align: center;
-            padding: 25px 10px;
-        }
-
-        .pending-message i {
-            font-size: 70px;
-            color: #FFD700;
-            margin-bottom: 25px;
-            animation: pulse 1.5s infinite;
-        }
-
-        .pending-message h3 {
-            color: #FFD700;
-            margin-bottom: 15px;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.08); }
-            100% { opacity: 0.5; transform: scale(1); }
-        }
-
-        .close-modal-btn {
-            margin-top: 25px;
-            padding: 14px 35px;
-            background: transparent;
-            border: 1px solid #d000ff;
-            color: #d000ff;
-            border-radius: 40px;
-            cursor: pointer;
-        }
-
-        .toast-message {
-            position: fixed;
-            bottom: 35px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #00C853;
-            color: white;
-            padding: 14px 30px;
-            border-radius: 60px;
-            z-index: 2000;
-            display: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        :root { --gold: #FFD700; --bg-primary: #0a0a0f; --bg-secondary: #12121a; --bg-card: #181822; --text-white: #FFFFFF; --text-gray: #a0a0b0; --accent: #45A29E; --success: #00C853; --error: #FF3D00; --vodafone: #E60000; }
+        body { background: var(--bg-primary); min-height: 100vh; color: var(--text-white); }
+
+        /* تسجيل الدخول */
+        .login-container { margin: 0; padding: 0; background: linear-gradient(135deg, #1a002a, #3b0066); height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .login-card { background: #2b004d; padding: 35px 30px; border-radius: 25px; width: 340px; box-shadow: 0 0 30px rgba(128,0,255,0.6); text-align: center; border: 1px solid rgba(255,215,0,0.2); }
+        .login-card h2 { color: #fff; margin-bottom: 25px; font-weight: 800; font-size: 1.8rem; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
+        .input-box { width: 100%; padding: 14px 18px; margin: 12px 0; border: 2px solid transparent; border-radius: 14px; background: #1f1f2e; color: white; font-size: 16px; outline: none; direction: rtl; text-align: right; }
+        .input-box:focus { border-color: #d000ff; }
+        .btn { width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 14px; background: linear-gradient(90deg, #8a00ff, #d000ff); color: white; font-size: 18px; font-weight: 700; cursor: pointer; }
+        .error-message { color: #ff6b6b; margin-top: 15px; }
+        .telegram-link-box { margin-top: 25px; padding: 15px; background: rgba(0,136,204,0.1); border-radius: 16px; border: 1px solid #0088cc; }
+        .telegram-link { color: #0088cc; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
+
+        /* التطبيق */
+        .app-container { display: none; min-height: 100vh; background: #0a0a0f; position: relative; padding-bottom: 80px; }
+        .main-header { background: #12121a; padding: 16px 20px; border-bottom: 2px solid #d000ff; position: sticky; top: 0; z-index: 100; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .header-content h1 { font-size: 1.4rem; color: #FFD700; }
+        .user-controls { display: flex; align-items: center; gap: 12px; }
+        #userRoleDisplay { background: rgba(208,0,255,0.15); padding: 6px 16px; border-radius: 40px; color: #d000ff; }
+        .logout-btn, .admin-toggle-btn { background: transparent; border: 1px solid #d000ff; color: #d000ff; padding: 8px 16px; border-radius: 40px; cursor: pointer; }
+        .fab-add { position: fixed; bottom: 25px; left: 25px; width: 60px; height: 60px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 200; }
+        
+        /* لوحة التحكم */
+        .admin-panel { background: #12121a; margin: 20px auto; max-width: 1200px; border-radius: 20px; padding: 25px; border: 1px solid rgba(208,0,255,0.3); display: none; }
+        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 1px solid rgba(208,0,255,0.2); padding-bottom: 18px; }
+        .panel-header h2 { color: #FFD700; }
+        .close-panel { background: transparent; border: none; color: #a0a0b0; font-size: 1.8rem; cursor: pointer; }
+        .admin-game-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .admin-game-card { background: #181822; border-radius: 18px; padding: 20px; }
+        .admin-game-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+        .admin-game-header h3 { color: #FFD700; }
+        .delete-game-btn { background: transparent; border: none; color: #ff6b6b; cursor: pointer; }
+        .price-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); }
+        .price-item input { width: 90px; background: #0a0a0f; border: 1px solid #d000ff; border-radius: 8px; padding: 8px 10px; color: white; direction: ltr; }
+        .save-prices-btn { width: 100%; margin-top: 18px; padding: 12px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; }
+
+        /* مودال إضافة لعبة */
+        .add-game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1001; align-items: center; justify-content: center; }
+        .add-game-content { max-width: 480px; background: #181822; border-radius: 28px; padding: 30px 25px; border: 1px solid #d000ff; }
+        .add-game-content h2 { color: #FFD700; text-align: center; margin-bottom: 25px; }
+        .add-game-content input[type="text"] { width: 100%; padding: 14px; background: #0a0a0f; border: 1px solid #d000ff; border-radius: 14px; color: white; }
+        .items-list-container { max-height: 220px; overflow-y: auto; margin: 20px 0; }
+        .add-item-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        .add-item-row input { flex: 1; padding: 12px !important; }
+        .add-item-btn { background: var(--accent); color: white; border: none; padding: 12px 20px; border-radius: 14px; cursor: pointer; width: 100%; }
+        .modal-actions { display: flex; gap: 12px; margin-top: 25px; }
+        .modal-actions button { flex: 1; padding: 15px; border-radius: 14px; font-weight: 600; cursor: pointer; }
+        .save-game-btn { background: linear-gradient(90deg, #8a00ff, #d000ff); color: white; border: none; }
+        .cancel-btn { background: transparent; border: 1px solid #d000ff; color: #d000ff; }
+
+        /* صفحة الألعاب */
+        .games-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .section-title { font-size: 2rem; margin-bottom: 30px; color: #FFD700; text-align: center; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 18px; }
+        .game-card { background: #181822; border-radius: 20px; padding: 28px 15px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .game-card:hover { border-color: #d000ff; }
+        .game-card h3 { color: white; }
+
+        /* تفاصيل اللعبة */
+        .back-btn { background: transparent; border: none; color: #d000ff; font-size: 1.2rem; cursor: pointer; padding: 18px 22px; }
+        .detail-header { display: flex; align-items: center; justify-content: space-between; padding: 5px 20px; background: #12121a; }
+        .detail-header h1 { color: #FFD700; }
+        .detail-container { max-width: 500px; margin: 20px auto; padding: 0 20px 35px; }
+        .player-id-section { background: #181822; padding: 22px; border-radius: 24px; margin-bottom: 30px; }
+        .player-id-section label { color: #d000ff; font-size: 1.2rem; font-weight: 600; }
+        .player-id-section input { width: 100%; padding: 18px; background: #0a0a0f; border: 2px solid #12121a; border-radius: 18px; color: white; direction: ltr; }
+        .items-title { color: #FFD700; margin-bottom: 18px; }
+        .items-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .item-card { background: #181822; padding: 20px 10px; border-radius: 20px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .item-card.selected { border-color: #d000ff; background: rgba(208,0,255,0.1); }
+        .item-price { color: #FFD700; font-weight: 700; }
+        .buy-btn { width: 100%; margin-top: 35px; padding: 20px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 60px; color: white; font-size: 1.4rem; font-weight: 700; cursor: pointer; }
+        .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* مودال الدفع */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { max-width: 460px; background: #181822; border-radius: 36px; padding: 35px 25px; border: 1px solid #d000ff; text-align: center; }
+        .modal-icon { font-size: 55px; color: #FFD700; margin-bottom: 25px; }
+        .modal-content h2 { color: #FFD700; margin-bottom: 28px; }
+        .vodafone-box { background: #0a0a0f; padding: 28px; border-radius: 24px; border: 2px solid #E60000; margin-bottom: 30px; }
+        .vodafone-logo { color: #E60000; font-size: 2rem; font-weight: 800; }
+        .vodafone-number { font-size: 2.2rem; color: white; letter-spacing: 4px; direction: ltr; }
+        .copy-btn { background: #E60000; color: white; border: none; padding: 10px 25px; border-radius: 40px; cursor: pointer; }
+        .order-summary { background: rgba(208,0,255,0.06); padding: 18px; border-radius: 18px; margin-bottom: 28px; text-align: right; }
+        .confirm-transfer-btn { width: 100%; padding: 18px; background: #00C853; border: none; border-radius: 60px; color: white; font-size: 1.3rem; font-weight: 700; cursor: pointer; }
+        .pending-message { display: none; text-align: center; padding: 25px 10px; }
+        .pending-message i { font-size: 70px; color: #FFD700; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+        .close-modal-btn { margin-top: 25px; padding: 14px 35px; background: transparent; border: 1px solid #d000ff; color: #d000ff; border-radius: 40px; cursor: pointer; }
+        .toast-message { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); background: #00C853; color: white; padding: 14px 30px; border-radius: 60px; z-index: 2000; display: none; }
+        .empty-state { text-align: center; color: #a0a0b0; padding: 50px; }
     </style>
 </head>
 <body>
 
-<!-- ========== صفحة تسجيل الدخول ========== -->
 <div id="loginPage" class="login-container">
     <div class="login-card">
         <h2>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h2>
-        
-        <form id="loginForm">
+        <form onsubmit="return false;">
             <input type="password" id="passwordInput" class="input-box" placeholder="كلمة المرور" required>
-            <button type="submit" class="btn">LOGIN SECURELY →</button>
+            <button class="btn" onclick="handleLogin()">LOGIN SECURELY →</button>
         </form>
-        
         <div id="errorMessage" class="error-message"></div>
-        
         <div class="telegram-link-box">
             <a href="https://t.me/QB_VJ" target="_blank" class="telegram-link">
-                <i class="fab fa-telegram"></i>
-                تواصل معنا على تيليجرام
-                <i class="fas fa-external-link-alt" style="font-size: 12px;"></i>
+                <i class="fab fa-telegram"></i> تواصل معنا على تيليجرام
             </a>
         </div>
     </div>
 </div>
 
-<!-- ========== التطبيق الرئيسي ========== -->
 <div id="appContainer" class="app-container">
     <header class="main-header">
         <div class="header-content">
             <h1><i class="fas fa-crown"></i> 𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h1>
             <div class="user-controls">
                 <span id="userRoleDisplay"></span>
-                <button id="adminToggleBtn" class="admin-toggle-btn" style="display: none;">
-                    <i class="fas fa-cog"></i>
-                    لوحة التحكم
-                </button>
-                <button id="logoutBtn" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    خروج
-                </button>
+                <button id="adminToggleBtn" class="admin-toggle-btn" style="display: none;" onclick="openAdminPanel()"><i class="fas fa-cog"></i> لوحة التحكم</button>
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
             </div>
         </div>
     </header>
 
-    <!-- لوحة تحكم الأدمن -->
     <div id="adminPanel" class="admin-panel">
         <div class="panel-header">
             <h2><i class="fas fa-sliders-h"></i> تعديل الأسعار</h2>
-            <button id="closeAdminPanel" class="close-panel">
-                <i class="fas fa-times"></i>
-            </button>
+            <button class="close-panel" onclick="closeAdminPanel()"><i class="fas fa-times"></i></button>
         </div>
         <div class="admin-game-list" id="adminGameList"></div>
     </div>
 
-    <!-- صفحة الألعاب -->
+    <div id="addGameModal" class="add-game-modal" onclick="if(event.target===this)closeAddGameModal()">
+        <div class="add-game-content">
+            <h2><i class="fas fa-plus-circle"></i> إضافة لعبة جديدة</h2>
+            <label>اسم اللعبة</label>
+            <input type="text" id="newGameName" placeholder="مثال: Free Fire" dir="ltr">
+            <label>العناصر (الكمية - السعر)</label>
+            <div id="newGameItems" class="items-list-container"></div>
+            <button class="add-item-btn" onclick="addNewItemRow()"><i class="fas fa-plus"></i> إضافة عنصر</button>
+            <div class="modal-actions">
+                <button class="save-game-btn" onclick="saveNewGame()">حفظ اللعبة</button>
+                <button class="cancel-btn" onclick="closeAddGameModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <div id="gamesPage">
         <main class="games-container">
             <h2 class="section-title">اختر لعبتك المفضلة</h2>
@@ -742,16 +167,89 @@
         </main>
     </div>
 
-    <!-- صفحة تفاصيل اللعبة -->
     <div id="detailsPage" style="display: none;">
-        <button class="back-btn" onclick="backToGames()">
-            <i class="fas fa-arrow-right"></i>
-            رجوع للألعاب
-        </button>
-        <div class="detail-header">
-            <h1 id="gameTitle"></h1>
-            <div></div>
-        </div>
+        <button class="back-btn" onclick="backToGames()"><i class="fas fa-arrow-right"></i> رجوع للألعاب</button>
+        <div class="detail-header"><h1 id="gameTitle"></h1><div></div></div>
         <main class="detail-container">
-            <div class="game-banner">
-          
+            <div class="player-id-section">
+                <label><i class="fas fa-id-card"></i> أدخل معرف اللاعب (ID)</label>
+                <input type="text" id="playerId" placeholder="مثال: 123456789" oninput="checkBuyButton()">
+            </div>
+            <h3 class="items-title">اختر القيمة</h3>
+            <div class="items-grid" id="itemsGrid"></div>
+            <button class="buy-btn" id="buyBtn" onclick="showPaymentModal()" disabled><i class="fas fa-shopping-cart"></i> شراء</button>
+        </main>
+    </div>
+
+    <button id="fabAddBtn" class="fab-add" onclick="openAddGameModal()"><i class="fas fa-plus"></i></button>
+</div>
+
+<div id="paymentModal" class="modal" onclick="if(event.target===this)closePaymentModal()">
+    <div class="modal-content">
+        <div id="paymentStep">
+            <div class="modal-icon"><i class="fas fa-money-bill-wave"></i></div>
+            <h2>طريقة الدفع</h2>
+            <div class="vodafone-box">
+                <div class="vodafone-logo"><i class="fas fa-wifi"></i> Vodafone Cash</div>
+                <div class="vodafone-number">01040199135</div>
+                <button class="copy-btn" onclick="copyVodafoneNumber()"><i class="fas fa-copy"></i> نسخ الرقم</button>
+            </div>
+            <div class="order-summary" id="orderSummary"></div>
+            <button class="confirm-transfer-btn" onclick="confirmTransfer()"><i class="fas fa-check-circle"></i> تم التحويل</button>
+        </div>
+        <div id="pendingStep" class="pending-message" style="display: none;">
+            <i class="fas fa-clock"></i>
+            <h3>طلبك قيد المراجعة</h3>
+            <p>سيتم مراجعة طلبك وتنفيذه في أقرب وقت</p>
+            <p style="margin-top:20px;">شكراً لتعاملك مع 𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</p>
+            <button class="close-modal-btn" onclick="closePaymentModal()">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast-message"></div>
+
+<script>
+const TELEGRAM_BOT_TOKEN = '8667816880:AAH0sb2Rdo1xtuZaJhmWYYmrJ2Jyj2YFUvI';
+const TELEGRAM_CHAT_ID = '8397243250';
+let currentUser = null, selectedGame = null, selectedItem = null, gamesData = [], tempNewItems = [];
+
+const defaultGames = [
+    { id: 1, name: 'Free Fire', items: [{ id: 1, name: '100 Diamond', price: 50 }, { id: 2, name: '520 Diamond', price: 250 }, { id: 3, name: '1060 Diamond', price: 500 }] },
+    { id: 2, name: 'PUBG Mobile', items: [{ id: 1, name: '60 UC', price: 60 }, { id: 2, name: '300 UC', price: 300 }, { id: 3, name: '600 UC', price: 600 }] }
+];
+
+function loadGamesData() { const s = localStorage.getItem('madmoun_games_data'); gamesData = s ? JSON.parse(s) : JSON.parse(JSON.stringify(defaultGames)); if (!s) saveGamesData(); }
+function saveGamesData() { localStorage.setItem('madmoun_games_data', JSON.stringify(gamesData)); }
+function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
+
+window.handleLogin = function() {
+    const p = document.getElementById('passwordInput').value;
+    if (p === '@YOUSSEF1234') { currentUser = 'admin'; document.getElementById('userRoleDisplay').textContent = 'أدمن'; document.getElementById('adminToggleBtn').style.display = 'flex'; document.getElementById('fabAddBtn').style.display = 'flex'; showApp(); }
+    else if (p === 'madmoun') { currentUser = 'user'; document.getElementById('userRoleDisplay').textContent = 'زائر'; document.getElementById('adminToggleBtn').style.display = 'none'; document.getElementById('fabAddBtn').style.display = 'none'; showApp(); }
+    else document.getElementById('errorMessage').textContent = '❌ كلمة المرور غير صحيحة';
+};
+
+function showApp() { document.getElementById('loginPage').style.display = 'none'; document.getElementById('appContainer').style.display = 'block'; loadGamesData(); renderGames(); if (currentUser === 'admin') renderAdminPanel(); }
+window.logout = function() { currentUser = null; document.getElementById('loginPage').style.display = 'flex'; document.getElementById('appContainer').style.display = 'none'; document.getElementById('passwordInput').value = ''; document.getElementById('detailsPage').style.display = 'none'; document.getElementById('gamesPage').style.display = 'block'; };
+window.openAdminPanel = function() { document.getElementById('adminPanel').style.display = 'block'; renderAdminPanel(); };
+window.closeAdminPanel = function() { document.getElementById('adminPanel').style.display = 'none'; };
+
+function renderAdminPanel() {
+    const l = document.getElementById('adminGameList'); l.innerHTML = '';
+    if (!gamesData.length) { l.innerHTML = '<div class="empty-state">لا توجد ألعاب</div>'; return; }
+    gamesData.forEach(g => {
+        const c = document.createElement('div'); c.className = 'admin-game-card';
+        let h = ''; g.items.forEach((it, i) => { h += `<div class="price-item"><span>${it.name}</span><input type="number" id="price_${g.id}_${i}" value="${it.price}" min="0"> ج.م</div>`; });
+        c.innerHTML = `<div class="admin-game-header"><h3>${g.name}</h3><button class="delete-game-btn" onclick="deleteGame(${g.id})"><i class="fas fa-trash"></i></button></div>${h}<button class="save-prices-btn" onclick="saveGamePrices(${g.id})"><i class="fas fa-save"></i> حفظ الأسعار</button>`;
+        l.appendChild(c);
+    });
+}
+
+window.saveGamePrices = function(id) { const g = gamesData.find(x => x.id === id); if (!g) return; g.items.forEach((it, i) => { const inp = document.getElementById(`price_${id}_${i}`); if (inp) it.price = parseInt(inp.value) || 0; }); saveGamesData(); showToast('✅ تم حفظ الأسعار'); renderGames(); };
+window.deleteGame = function(id) { if (confirm('حذف اللعبة؟')) { gamesData = gamesData.filter(g => g.id !== id); saveGamesData(); renderGames(); renderAdminPanel(); showToast('🗑️ تم الحذف'); } };
+window.openAddGameModal = function() { tempNewItems = [{ name: '', price: '' }]; document.getElementById('newGameName').value = ''; renderNewGameItems(); document.getElementById('addGameModal').style.display = 'flex'; };
+
+function renderNewGameItems() {
+    const c = document.getElementById('newGameItems'); c.innerHTML = '';
+    tempNewItems.forEach((it, i) => { const r = document.createElement('div'); r.className = 'add-item-row'; r.innerHTML = `<input type="text" placeholder="اسم العنصر" value="${i
