@@ -38,7 +38,7 @@
             color: var(--text-white);
         }
 
-        /* ========== صفحة تسجيل الدخول ========== */
+        /* ========== صفحة تسجيل الدخول (تصميمك) ========== */
         .login-container {
             margin: 0;
             padding: 0;
@@ -124,6 +124,7 @@
             font-size: 14px;
         }
 
+        /* رابط تيليجرام */
         .telegram-link-box {
             margin-top: 25px;
             padding: 15px;
@@ -177,8 +178,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
         }
 
         .header-content h1 {
@@ -192,8 +191,7 @@
         .user-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 12px;
         }
 
         #userRoleDisplay {
@@ -204,7 +202,7 @@
             color: #d000ff;
         }
 
-        .logout-btn, .admin-toggle-btn, .add-game-btn {
+        .logout-btn, .admin-toggle-btn {
             background: transparent;
             border: 1px solid #d000ff;
             color: #d000ff;
@@ -218,19 +216,9 @@
             transition: all 0.3s;
         }
 
-        .add-game-btn {
-            background: linear-gradient(90deg, #8a00ff, #d000ff);
-            color: white;
-            border: none;
-        }
-
         .logout-btn:hover, .admin-toggle-btn:hover {
             background: #d000ff;
             color: white;
-        }
-
-        .add-game-btn:hover {
-            opacity: 0.85;
         }
 
         /* ========== لوحة تحكم الأدمن ========== */
@@ -290,25 +278,19 @@
         .admin-game-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 15px;
             margin-bottom: 20px;
         }
 
+        .admin-game-header img {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            object-fit: cover;
+        }
+
         .admin-game-header h3 {
-            font-size: 1.3rem;
-            color: #FFD700;
-        }
-
-        .delete-game-btn {
-            background: transparent;
-            border: none;
-            color: #ff6b6b;
-            cursor: pointer;
             font-size: 1.2rem;
-        }
-
-        .delete-game-btn:hover {
-            color: #ff0000;
         }
 
         .price-item {
@@ -348,113 +330,7 @@
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
-        }
-
-        /* ========== مودال إضافة لعبة ========== */
-        .add-game-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1001;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .add-game-content {
-            max-width: 500px;
-            width: 100%;
-            background: #181822;
-            border-radius: 30px;
-            padding: 30px 25px;
-            border: 1px solid #d000ff;
-        }
-
-        .add-game-content h2 {
-            color: #FFD700;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .add-game-content label {
-            display: block;
-            color: #a0a0b0;
-            margin-bottom: 8px;
-            margin-top: 15px;
-        }
-
-        .add-game-content input[type="text"] {
-            width: 100%;
-            padding: 14px;
-            background: #0a0a0f;
-            border: 1px solid #d000ff;
-            border-radius: 16px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .items-list-container {
-            max-height: 250px;
-            overflow-y: auto;
-            margin: 20px 0;
-        }
-
-        .add-item-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .add-item-row input {
-            flex: 1;
-            padding: 12px !important;
-        }
-
-        .add-item-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 16px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .modal-actions button {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .save-game-btn {
-            background: linear-gradient(90deg, #8a00ff, #d000ff);
-            color: white;
-        }
-
-        .cancel-btn {
-            background: transparent;
-            border: 1px solid #d000ff !important;
-            color: #d000ff;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #a0a0b0;
-            padding: 50px;
+            transition: all 0.3s;
         }
 
         /* ========== صفحة الألعاب ========== */
@@ -479,8 +355,8 @@
 
         .game-card {
             background: #181822;
-            border-radius: 20px;
-            padding: 30px 20px;
+            border-radius: 24px;
+            padding: 22px 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -493,8 +369,16 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
+        .game-card img {
+            width: 85px;
+            height: 85px;
+            border-radius: 22px;
+            object-fit: cover;
+            margin-bottom: 14px;
+        }
+
         .game-card h3 {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: white;
         }
 
@@ -520,7 +404,7 @@
         }
 
         .detail-header h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #FFD700;
         }
 
@@ -528,6 +412,21 @@
             max-width: 500px;
             margin: 20px auto;
             padding: 0 20px 35px;
+        }
+
+        .game-banner {
+            width: 100%;
+            height: 180px;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .game-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .player-id-section {
@@ -789,4 +688,70 @@
         <h2>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h2>
         
         <form id="loginForm">
-            <i
+            <input type="password" id="passwordInput" class="input-box" placeholder="كلمة المرور" required>
+            <button type="submit" class="btn">LOGIN SECURELY →</button>
+        </form>
+        
+        <div id="errorMessage" class="error-message"></div>
+        
+        <div class="telegram-link-box">
+            <a href="https://t.me/QB_VJ" target="_blank" class="telegram-link">
+                <i class="fab fa-telegram"></i>
+                تواصل معنا على تيليجرام
+                <i class="fas fa-external-link-alt" style="font-size: 12px;"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== التطبيق الرئيسي ========== -->
+<div id="appContainer" class="app-container">
+    <header class="main-header">
+        <div class="header-content">
+            <h1><i class="fas fa-crown"></i> 𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h1>
+            <div class="user-controls">
+                <span id="userRoleDisplay"></span>
+                <button id="adminToggleBtn" class="admin-toggle-btn" style="display: none;">
+                    <i class="fas fa-cog"></i>
+                    لوحة التحكم
+                </button>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    خروج
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- لوحة تحكم الأدمن -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="panel-header">
+            <h2><i class="fas fa-sliders-h"></i> تعديل الأسعار</h2>
+            <button id="closeAdminPanel" class="close-panel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="admin-game-list" id="adminGameList"></div>
+    </div>
+
+    <!-- صفحة الألعاب -->
+    <div id="gamesPage">
+        <main class="games-container">
+            <h2 class="section-title">اختر لعبتك المفضلة</h2>
+            <div class="games-grid" id="gamesGrid"></div>
+        </main>
+    </div>
+
+    <!-- صفحة تفاصيل اللعبة -->
+    <div id="detailsPage" style="display: none;">
+        <button class="back-btn" onclick="backToGames()">
+            <i class="fas fa-arrow-right"></i>
+            رجوع للألعاب
+        </button>
+        <div class="detail-header">
+            <h1 id="gameTitle"></h1>
+            <div></div>
+        </div>
+        <main class="detail-container">
+            <div class="game-banner">
+          
