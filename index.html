@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</title>
     
-    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-        /* ========== GLOBAL STYLES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -21,29 +21,26 @@
         :root {
             --gold: #FFD700;
             --gold-dark: #B8860B;
-            --bg-primary: #0B0C10;
-            --bg-secondary: #1F2833;
-            --bg-card: #252A34;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #181822;
             --text-white: #FFFFFF;
-            --text-gray: #C5C6C7;
+            --text-gray: #a0a0b0;
             --accent: #45A29E;
             --success: #00C853;
             --error: #FF3D00;
             --vodafone: #E60000;
-            --border-radius: 20px;
-            --shadow: 0 20px 40px rgba(0,0,0,0.5);
+            --border-radius: 24px;
+            --shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
         body {
             background: var(--bg-primary);
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(69, 162, 158, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 60%);
             min-height: 100vh;
             color: var(--text-white);
         }
 
-        /* ========== LOGIN PAGE ========== */
+        /* ========== صفحة تسجيل الدخول ========== */
         .login-container {
             min-height: 100vh;
             display: flex;
@@ -53,84 +50,45 @@
         }
 
         .login-card {
-            max-width: 450px;
+            max-width: 420px;
             width: 100%;
             background: var(--bg-card);
-            border-radius: var(--border-radius);
-            overflow: hidden;
+            border-radius: 40px;
+            padding: 45px 30px 40px;
             box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 215, 0, 0.15);
-        }
-
-        .welcome-image {
-            position: relative;
-            height: 220px;
-            overflow: hidden;
-        }
-
-        .welcome-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.5);
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, var(--bg-card));
-        }
-
-        .store-name {
-            position: absolute;
-            bottom: 30px;
-            left: 0;
-            right: 0;
+            border: 1px solid rgba(255, 215, 0, 0.1);
             text-align: center;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--gold);
-            text-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 30px rgba(255,215,0,0.3);
-            letter-spacing: 2px;
         }
 
-        .login-form {
-            padding: 30px 25px 35px;
-        }
-
-        .icon-wrapper {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border-radius: 50%;
+        .logo-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 25px;
+            background: linear-gradient(145deg, #1e1e30, #12121a);
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: -65px auto 20px;
-            box-shadow: 0 8px 25px rgba(255,215,0,0.3);
-            border: 3px solid var(--bg-card);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 215, 0, 0.15) inset;
         }
 
-        .icon-wrapper i {
-            font-size: 32px;
-            color: var(--bg-primary);
+        .logo-icon i {
+            font-size: 45px;
+            color: var(--gold);
         }
 
-        .login-form h2 {
-            text-align: center;
-            font-size: 1.5rem;
+        .store-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--gold);
             margin-bottom: 8px;
-            color: var(--text-white);
+            letter-spacing: 2px;
         }
 
-        .subtitle {
-            text-align: center;
+        .welcome-text {
             color: var(--text-gray);
-            margin-bottom: 25px;
-            font-size: 0.95rem;
+            margin-bottom: 35px;
+            font-size: 1rem;
         }
 
         .input-group {
@@ -138,36 +96,39 @@
             display: flex;
             align-items: center;
             background: var(--bg-secondary);
-            border-radius: 50px;
+            border-radius: 60px;
             padding: 5px 20px;
             border: 2px solid transparent;
             transition: all 0.3s;
+            margin-bottom: 10px;
         }
 
         .input-group:focus-within {
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(255,215,0,0.2);
+            box-shadow: 0 0 0 3px rgba(255,215,0,0.1);
         }
 
         .input-group i {
             color: var(--gold);
             font-size: 1.2rem;
-            margin-left: 10px;
+            margin-left: 12px;
         }
 
         .input-group input {
             flex: 1;
             background: transparent;
             border: none;
-            padding: 16px 0;
+            padding: 18px 0;
             color: var(--text-white);
-            font-size: 1rem;
+            font-size: 1.1rem;
             outline: none;
             direction: rtl;
+            text-align: right;
         }
 
         .input-group input::placeholder {
             color: var(--text-gray);
+            font-size: 0.95rem;
         }
 
         #togglePassword {
@@ -175,7 +136,7 @@
             border: none;
             color: var(--text-gray);
             cursor: pointer;
-            padding: 5px;
+            padding: 8px;
             transition: color 0.3s;
         }
 
@@ -185,13 +146,13 @@
 
         .login-btn {
             width: 100%;
-            padding: 16px;
-            margin-top: 25px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            padding: 18px;
+            margin-top: 30px;
+            background: linear-gradient(135deg, var(--gold), #b8860b);
             border: none;
-            border-radius: 50px;
-            color: var(--bg-primary);
-            font-size: 1.2rem;
+            border-radius: 60px;
+            color: #0a0a0f;
+            font-size: 1.25rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -199,47 +160,49 @@
             justify-content: center;
             gap: 10px;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255,215,0,0.2);
+            box-shadow: 0 8px 25px rgba(255,215,0,0.15);
         }
 
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255,215,0,0.3);
+            box-shadow: 0 12px 30px rgba(255,215,0,0.25);
         }
 
         .error-message {
             color: var(--error);
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
             min-height: 24px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .hint-box {
-            margin-top: 25px;
-            padding: 15px;
-            background: rgba(69, 162, 158, 0.1);
-            border-radius: 12px;
+            margin-top: 30px;
+            padding: 18px;
+            background: rgba(69, 162, 158, 0.06);
+            border-radius: 20px;
             border-right: 4px solid var(--accent);
             font-size: 0.9rem;
+            text-align: right;
         }
 
         .hint-box p {
             color: var(--text-gray);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .hint-box code {
-            background: var(--bg-primary);
-            padding: 3px 10px;
-            border-radius: 20px;
+            background: #0a0a0f;
+            padding: 4px 12px;
+            border-radius: 30px;
             color: var(--gold);
             font-family: monospace;
             direction: ltr;
             display: inline-block;
+            font-size: 1rem;
         }
 
-        /* ========== MAIN APP (بعد الدخول) ========== */
+        /* ========== التطبيق الرئيسي ========== */
         .app-container {
             display: none;
             min-height: 100vh;
@@ -247,7 +210,7 @@
 
         .main-header {
             background: var(--bg-secondary);
-            padding: 15px 20px;
+            padding: 16px 20px;
             border-bottom: 2px solid var(--gold);
             position: sticky;
             top: 0;
@@ -263,7 +226,7 @@
         }
 
         .header-content h1 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--gold);
             display: flex;
             align-items: center;
@@ -273,14 +236,14 @@
         .user-controls {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         #userRoleDisplay {
-            background: rgba(255,215,0,0.15);
-            padding: 6px 15px;
-            border-radius: 30px;
-            font-size: 0.9rem;
+            background: rgba(255,215,0,0.12);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
             color: var(--gold);
         }
 
@@ -289,7 +252,7 @@
             border: 1px solid var(--gold);
             color: var(--gold);
             padding: 8px 16px;
-            border-radius: 30px;
+            border-radius: 40px;
             cursor: pointer;
             font-size: 0.9rem;
             display: flex;
@@ -300,18 +263,17 @@
 
         .logout-btn:hover, .admin-toggle-btn:hover {
             background: var(--gold);
-            color: var(--bg-primary);
+            color: #0a0a0f;
         }
 
-        /* ========== ADMIN PANEL ========== */
+        /* ========== لوحة تحكم الأدمن ========== */
         .admin-panel {
             background: var(--bg-secondary);
             margin: 20px auto;
             max-width: 1200px;
             border-radius: var(--border-radius);
-            padding: 20px;
-            border: 1px solid rgba(255,215,0,0.3);
-            box-shadow: var(--shadow);
+            padding: 25px;
+            border: 1px solid rgba(255,215,0,0.2);
             display: none;
         }
 
@@ -319,23 +281,24 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,215,0,0.2);
+            margin-bottom: 25px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,215,0,0.15);
         }
 
         .panel-header h2 {
             color: var(--gold);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            font-size: 1.5rem;
         }
 
         .close-panel {
             background: transparent;
             border: none;
             color: var(--text-gray);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
             transition: color 0.3s;
         }
@@ -346,69 +309,71 @@
 
         .admin-game-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         .admin-game-card {
             background: var(--bg-card);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 22px;
+            border: 1px solid rgba(255,255,255,0.03);
         }
 
         .admin-game-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .admin-game-header img {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
             object-fit: cover;
         }
 
         .admin-game-header h3 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .price-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
             padding: 8px 0;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
         }
 
         .price-item span {
             color: var(--text-gray);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .price-item input {
             width: 100px;
-            background: var(--bg-primary);
+            background: #0a0a0f;
             border: 1px solid var(--gold);
-            border-radius: 8px;
-            padding: 6px 10px;
+            border-radius: 10px;
+            padding: 8px 12px;
             color: var(--text-white);
             text-align: left;
             direction: ltr;
+            font-size: 1rem;
         }
 
         .save-prices-btn {
             width: 100%;
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 20px;
+            padding: 14px;
             background: var(--accent);
             border: none;
-            border-radius: 10px;
+            border-radius: 14px;
             color: white;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -417,7 +382,7 @@
             background: #3a8783;
         }
 
-        /* ========== GAMES GRID ========== */
+        /* ========== صفحة الألعاب ========== */
         .games-container {
             max-width: 1200px;
             margin: 30px auto;
@@ -425,22 +390,22 @@
         }
 
         .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
+            font-size: 2rem;
+            margin-bottom: 30px;
             color: var(--gold);
             text-align: center;
         }
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
         }
 
         .game-card {
             background: var(--bg-card);
-            border-radius: 20px;
-            padding: 20px 15px;
+            border-radius: 24px;
+            padding: 22px 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -448,17 +413,17 @@
         }
 
         .game-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
             border-color: var(--gold);
-            box-shadow: 0 10px 30px rgba(255,215,0,0.2);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         .game-card img {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
+            width: 85px;
+            height: 85px;
+            border-radius: 22px;
             object-fit: cover;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .game-card h3 {
@@ -466,14 +431,14 @@
             color: var(--text-white);
         }
 
-        /* ========== GAME DETAILS ========== */
+        /* ========== صفحة تفاصيل اللعبة ========== */
         .back-btn {
             background: transparent;
             border: none;
             color: var(--gold);
             font-size: 1.2rem;
             cursor: pointer;
-            padding: 15px 20px;
+            padding: 18px 22px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -483,27 +448,27 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 20px;
+            padding: 5px 20px;
             background: var(--bg-secondary);
         }
 
         .detail-header h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--gold);
         }
 
         .detail-container {
             max-width: 500px;
             margin: 20px auto;
-            padding: 0 20px 30px;
+            padding: 0 20px 35px;
         }
 
         .game-banner {
             width: 100%;
             height: 180px;
-            border-radius: 25px;
+            border-radius: 30px;
             overflow: hidden;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             box-shadow: var(--shadow);
         }
 
@@ -515,26 +480,27 @@
 
         .player-id-section {
             background: var(--bg-card);
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 25px;
+            padding: 22px;
+            border-radius: 24px;
+            margin-bottom: 30px;
         }
 
         .player-id-section label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
             color: var(--gold);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .player-id-section input {
             width: 100%;
-            padding: 15px;
-            background: var(--bg-primary);
+            padding: 18px;
+            background: #0a0a0f;
             border: 2px solid var(--bg-secondary);
-            border-radius: 15px;
+            border-radius: 18px;
             color: var(--text-white);
-            font-size: 1rem;
+            font-size: 1.1rem;
             text-align: left;
             direction: ltr;
             transition: border 0.3s;
@@ -546,21 +512,21 @@
         }
 
         .items-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+            font-size: 1.4rem;
+            margin-bottom: 18px;
             color: var(--gold);
         }
 
         .items-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 14px;
         }
 
         .item-card {
             background: var(--bg-card);
-            padding: 18px 12px;
-            border-radius: 18px;
+            padding: 20px 10px;
+            border-radius: 20px;
             text-align: center;
             cursor: pointer;
             border: 2px solid transparent;
@@ -573,46 +539,46 @@
 
         .item-card.selected {
             border-color: var(--gold);
-            background: rgba(255,215,0,0.1);
+            background: rgba(255,215,0,0.08);
         }
 
         .item-name {
             font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .item-price {
             color: var(--gold);
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .buy-btn {
             width: 100%;
-            margin-top: 30px;
-            padding: 18px;
+            margin-top: 35px;
+            padding: 20px;
             background: linear-gradient(135deg, var(--gold), var(--gold-dark));
             border: none;
-            border-radius: 50px;
-            color: var(--bg-primary);
-            font-size: 1.3rem;
+            border-radius: 60px;
+            color: #0a0a0f;
+            font-size: 1.4rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255,215,0,0.2);
+            box-shadow: 0 8px 25px rgba(255,215,0,0.2);
         }
 
         .buy-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
-        /* ========== MODAL (طريقة الدفع) ========== */
+        /* ========== مودال الدفع ========== */
         .modal {
             display: none;
             position: fixed;
@@ -620,7 +586,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -628,58 +594,59 @@
         }
 
         .modal-content {
-            max-width: 450px;
+            max-width: 460px;
             width: 100%;
             background: var(--bg-card);
-            border-radius: 30px;
-            padding: 30px 25px;
+            border-radius: 36px;
+            padding: 35px 25px;
             text-align: center;
             border: 1px solid var(--gold);
         }
 
         .modal-icon {
-            font-size: 50px;
+            font-size: 55px;
             color: var(--gold);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .modal-content h2 {
             color: var(--gold);
-            margin-bottom: 25px;
+            margin-bottom: 28px;
+            font-size: 1.8rem;
         }
 
         .vodafone-box {
-            background: var(--bg-primary);
-            padding: 25px;
-            border-radius: 20px;
+            background: #0a0a0f;
+            padding: 28px;
+            border-radius: 24px;
             border: 2px solid var(--vodafone);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .vodafone-logo {
             color: var(--vodafone);
             font-size: 2rem;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .vodafone-number {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--text-white);
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             direction: ltr;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .copy-btn {
             background: var(--vodafone);
             color: white;
             border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
+            padding: 10px 25px;
+            border-radius: 40px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
             transition: all 0.3s;
         }
 
@@ -688,16 +655,17 @@
         }
 
         .order-summary {
-            background: rgba(69, 162, 158, 0.1);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 25px;
+            background: rgba(69, 162, 158, 0.06);
+            padding: 18px;
+            border-radius: 18px;
+            margin-bottom: 28px;
             text-align: right;
         }
 
         .order-summary p {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: var(--text-gray);
+            font-size: 1.05rem;
         }
 
         .order-summary strong {
@@ -706,18 +674,18 @@
 
         .confirm-transfer-btn {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: var(--success);
             border: none;
-            border-radius: 50px;
+            border-radius: 60px;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             transition: all 0.3s;
         }
 
@@ -728,40 +696,73 @@
         .pending-message {
             display: none;
             text-align: center;
-            padding: 20px;
+            padding: 25px 10px;
         }
 
         .pending-message i {
-            font-size: 60px;
+            font-size: 70px;
             color: var(--gold);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             animation: pulse 1.5s infinite;
         }
 
         .pending-message h3 {
             color: var(--gold);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
         }
 
         .pending-message p {
             color: var(--text-gray);
+            font-size: 1.1rem;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.6; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.1); }
-            100% { opacity: 0.6; transform: scale(1); }
+            0% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.08); }
+            100% { opacity: 0.5; transform: scale(1); }
         }
 
         .close-modal-btn {
-            margin-top: 20px;
-            padding: 12px 30px;
+            margin-top: 25px;
+            padding: 14px 35px;
             background: transparent;
             border: 1px solid var(--gold);
             color: var(--gold);
-            border-radius: 30px;
+            border-radius: 40px;
             cursor: pointer;
+            font-size: 1.1rem;
             transition: all 0.3s;
         }
 
-    
+        .close-modal-btn:hover {
+            background: var(--gold);
+            color: #0a0a0f;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 60px;
+            font-size: 1rem;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== صفحة تسجيل الدخول ========== -->
+<div id="loginPage" class="login-container">
+    <div class="login-card">
+        <div class="logo-icon">
+            <i class="fas fa-crown"></i>
+        </div>
+        
+        <h1 class="store-name">
