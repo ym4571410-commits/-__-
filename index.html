@@ -92,7 +92,6 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; }
         .modal-content { max-width: 460px; background: #181822; border-radius: 36px; padding: 35px 25px; border: 1px solid #d000ff; text-align: center; }
         
-        /* الخطوة 1 - تأكيد الطلب */
         .step-icon { font-size: 60px; margin-bottom: 20px; }
         .step-icon.warning { color: var(--warning); }
         .step-icon.success { color: var(--success); }
@@ -109,7 +108,6 @@
         .next-btn { width: 100%; padding: 16px; background: linear-gradient(90deg, #8a00ff, #d000ff); border: none; border-radius: 50px; color: white; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
         .back-btn-light { width: 100%; padding: 14px; margin-top: 12px; background: transparent; border: 1px solid var(--text-gray); border-radius: 50px; color: var(--text-gray); cursor: pointer; }
         
-        /* الخطوة 2 - الدفع */
         .vodafone-box { background: #0a0a0f; padding: 28px; border-radius: 24px; border: 2px solid var(--vodafone); margin: 20px 0; }
         .vodafone-logo { color: var(--vodafone); font-size: 2rem; font-weight: 800; margin-bottom: 15px; }
         .vodafone-number { font-size: 2.5rem; font-weight: 700; color: white; letter-spacing: 5px; direction: ltr; margin-bottom: 20px; }
@@ -117,7 +115,6 @@
         
         .confirm-transfer-btn { width: 100%; padding: 18px; background: var(--success); border: none; border-radius: 60px; color: white; font-size: 1.3rem; font-weight: 700; cursor: pointer; margin-top: 20px; }
         
-        /* الخطوة 3 - قيد المراجعة */
         .pending-message { text-align: center; padding: 20px 10px; }
         .pending-message i { font-size: 80px; color: var(--gold); margin-bottom: 25px; animation: pulse 1.5s infinite; }
         .pending-message h3 { color: var(--gold); margin-bottom: 15px; font-size: 1.6rem; }
@@ -137,7 +134,7 @@
     <div class="login-card">
         <h2>𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h2>
         <input type="password" id="passwordInput" class="input-box" placeholder="كلمة المرور" required>
-        <button class="btn" onclick="handleLogin()">LOGIN SECURELY →</button>
+        <button class="btn" id="loginBtn">LOGIN SECURELY →</button>
         <div id="errorMessage" class="error-message"></div>
         <div class="telegram-link-box">
             <a href="https://t.me/QB_VJ" target="_blank" class="telegram-link">
@@ -154,8 +151,8 @@
             <h1><i class="fas fa-crown"></i> 𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</h1>
             <div class="user-controls">
                 <span id="userRoleDisplay"></span>
-                <button id="adminToggleBtn" class="admin-toggle-btn" style="display: none;" onclick="openAdminPanel()"><i class="fas fa-cog"></i> لوحة التحكم</button>
-                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                <button id="adminToggleBtn" class="admin-toggle-btn" style="display: none;"><i class="fas fa-cog"></i> لوحة التحكم</button>
+                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> خروج</button>
             </div>
         </div>
     </header>
@@ -163,22 +160,22 @@
     <div id="adminPanel" class="admin-panel">
         <div class="panel-header">
             <h2><i class="fas fa-sliders-h"></i> تعديل الأسعار</h2>
-            <button class="close-panel" onclick="closeAdminPanel()"><i class="fas fa-times"></i></button>
+            <button class="close-panel" id="closeAdminPanelBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="admin-game-list" id="adminGameList"></div>
     </div>
 
-    <div id="addGameModal" class="add-game-modal" onclick="if(event.target===this)closeAddGameModal()">
+    <div id="addGameModal" class="add-game-modal">
         <div class="add-game-content">
             <h2><i class="fas fa-plus-circle"></i> إضافة لعبة جديدة</h2>
             <label>اسم اللعبة</label>
             <input type="text" id="newGameName" placeholder="مثال: Free Fire" dir="ltr">
             <label>العناصر (الكمية - السعر)</label>
             <div id="newGameItems" class="items-list-container"></div>
-            <button class="add-item-btn" onclick="addNewItemRow()"><i class="fas fa-plus"></i> إضافة عنصر</button>
+            <button class="add-item-btn" id="addNewItemBtn"><i class="fas fa-plus"></i> إضافة عنصر</button>
             <div class="modal-actions">
-                <button class="save-game-btn" onclick="saveNewGame()">حفظ اللعبة</button>
-                <button class="cancel-btn" onclick="closeAddGameModal()">إلغاء</button>
+                <button class="save-game-btn" id="saveNewGameBtn">حفظ اللعبة</button>
+                <button class="cancel-btn" id="cancelAddGameBtn">إلغاء</button>
             </div>
         </div>
     </div>
@@ -191,26 +188,25 @@
     </div>
 
     <div id="detailsPage" style="display: none;">
-        <button class="back-btn" onclick="backToGames()"><i class="fas fa-arrow-right"></i> رجوع للألعاب</button>
+        <button class="back-btn" id="backToGamesBtn"><i class="fas fa-arrow-right"></i> رجوع للألعاب</button>
         <div class="detail-header"><h1 id="gameTitle"></h1><div></div></div>
         <main class="detail-container">
             <div class="player-id-section">
                 <label><i class="fas fa-id-card"></i> أدخل معرف اللاعب (ID)</label>
-                <input type="text" id="playerId" placeholder="مثال: 123456789" oninput="checkBuyButton()">
+                <input type="text" id="playerId" placeholder="مثال: 123456789">
             </div>
             <h3 class="items-title">اختر القيمة</h3>
             <div class="items-grid" id="itemsGrid"></div>
-            <button class="buy-btn" id="buyBtn" onclick="showPaymentModal()" disabled><i class="fas fa-shopping-cart"></i> شراء</button>
+            <button class="buy-btn" id="buyBtn" disabled><i class="fas fa-shopping-cart"></i> شراء</button>
         </main>
     </div>
 
-    <button id="fabAddBtn" class="fab-add" onclick="openAddGameModal()"><i class="fas fa-plus"></i></button>
+    <button id="fabAddBtn" class="fab-add"><i class="fas fa-plus"></i></button>
 </div>
 
-<!-- مودال الدفع - 3 خطوات -->
-<div id="paymentModal" class="modal" onclick="if(event.target===this)closePaymentModal()">
+<!-- مودال الدفع -->
+<div id="paymentModal" class="modal">
     <div class="modal-content">
-        <!-- الخطوة 1: تأكيد الطلب وتحذير -->
         <div id="step1">
             <div class="step-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
             <h2>تأكيد الطلب</h2>
@@ -219,25 +215,23 @@
                 <p><i class="fas fa-hand-holding-usd"></i> يرجى إرسال الأموال أولاً</p>
                 <small>لن يتم شحن الطلب إلا بعد تحويل المبلغ</small>
             </div>
-            <button class="next-btn" onclick="goToStep2()"><i class="fas fa-arrow-left"></i> متابعة للدفع</button>
-            <button class="back-btn-light" onclick="closePaymentModal()">إلغاء</button>
+            <button class="next-btn" id="goToStep2Btn"><i class="fas fa-arrow-left"></i> متابعة للدفع</button>
+            <button class="back-btn-light" id="cancelStep1Btn">إلغاء</button>
         </div>
         
-        <!-- الخطوة 2: طريقة الدفع -->
         <div id="step2" style="display: none;">
             <div class="step-icon gold"><i class="fab fa-whatsapp"></i></div>
             <h2>طريقة الدفع</h2>
             <div class="vodafone-box">
                 <div class="vodafone-logo"><i class="fas fa-wifi"></i> Vodafone Cash</div>
                 <div class="vodafone-number">01040199135</div>
-                <button class="copy-btn" onclick="copyVodafoneNumber()"><i class="fas fa-copy"></i> نسخ الرقم</button>
+                <button class="copy-btn" id="copyVodafoneBtn"><i class="fas fa-copy"></i> نسخ الرقم</button>
             </div>
             <div class="order-details" id="step2OrderDetails"></div>
-            <button class="confirm-transfer-btn" onclick="goToStep3()"><i class="fas fa-check-circle"></i> تم التحويل</button>
-            <button class="back-btn-light" onclick="goToStep1()"><i class="fas fa-arrow-right"></i> رجوع</button>
+            <button class="confirm-transfer-btn" id="goToStep3Btn"><i class="fas fa-check-circle"></i> تم التحويل</button>
+            <button class="back-btn-light" id="backToStep1Btn"><i class="fas fa-arrow-right"></i> رجوع</button>
         </div>
         
-        <!-- الخطوة 3: قيد المراجعة -->
         <div id="step3" style="display: none;">
             <div class="pending-message">
                 <i class="fas fa-clock"></i>
@@ -245,7 +239,7 @@
                 <p>سيتم مراجعة طلبك وتنفيذه في أقرب وقت</p>
                 <p style="margin-top: 20px; color: var(--gold);">شكراً لتعاملك مع 𝑴𝑨𝑫𝑴𝑶𝑼𝑵 𝑺𝑻𝑶𝑹𝑬</p>
             </div>
-            <button class="close-modal-btn" onclick="closePaymentModal()">إغلاق</button>
+            <button class="close-modal-btn" id="closeModalBtn">إغلاق</button>
         </div>
     </div>
 </div>
@@ -255,7 +249,7 @@
 <script>
 const TELEGRAM_BOT_TOKEN = '8667816880:AAH0sb2Rdo1xtuZaJhmWYYmrJ2Jyj2YFUvI';
 const TELEGRAM_CHAT_ID = '8397243250';
-let currentUser = null, selectedGame = null, selectedItem = null, gamesData = [], tempNewItems = [];
+let currentUser = null, selectedGame = null, selectedItem = null, gamesData = [], tempNewItems = [], currentPlayerId = '';
 
 const defaultGames = [
     { id: 1, name: 'Free Fire', items: [{ id: 1, name: '100 Diamond', price: 50 }, { id: 2, name: '520 Diamond', price: 250 }, { id: 3, name: '1060 Diamond', price: 500 }] },
@@ -266,11 +260,34 @@ function loadGamesData() { const s = localStorage.getItem('madmoun_games_data');
 function saveGamesData() { localStorage.setItem('madmoun_games_data', JSON.stringify(gamesData)); }
 function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
 
-window.handleLogin = function() {
-    const p = document.getElementById('passwordInput').value;
-    if (p === '@YOUSSEF1234') { currentUser = 'admin'; document.getElementById('userRoleDisplay').textContent = 'أدمن'; document.getElementById('adminToggleBtn').style.display = 'flex'; document.getElementById('fabAddBtn').style.display = 'flex'; showApp(); }
-    else if (p === 'madmoun') { currentUser = 'user'; document.getElementById('userRoleDisplay').textContent = 'زائر'; document.getElementById('adminToggleBtn').style.display = 'none'; document.getElementById('fabAddBtn').style.display = 'none'; showApp(); }
-    else document.getElementById('errorMessage').textContent = '❌ كلمة المرور غير صحيحة';
-};
+// ========== تسجيل الدخول ==========
+document.getElementById('loginBtn').addEventListener('click', function() {
+    const password = document.getElementById('passwordInput').value;
+    const errorMsg = document.getElementById('errorMessage');
+    
+    if (password === '@YOUSSEF1234') {
+        currentUser = 'admin';
+        document.getElementById('userRoleDisplay').textContent = 'أدمن';
+        document.getElementById('adminToggleBtn').style.display = 'flex';
+        document.getElementById('fabAddBtn').style.display = 'flex';
+        showApp();
+    } else if (password === 'madmoun') {
+        currentUser = 'user';
+        document.getElementById('userRoleDisplay').textContent = 'زائر';
+        document.getElementById('adminToggleBtn').style.display = 'none';
+        document.getElementById('fabAddBtn').style.display = 'none';
+        showApp();
+    } else {
+        errorMsg.textContent = '❌ كلمة المرور غير صحيحة';
+    }
+});
 
-function showApp() { document.getElementById('loginPage').sty
+// إمكانية الضغط على Enter
+document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+
+function showApp() { 
+    document.getElementById('loginPage').style.display = 'none'; 
+    document.getElementById('appContainer').style.display = 'block'; 
+ 
